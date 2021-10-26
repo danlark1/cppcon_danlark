@@ -2108,7 +2108,7 @@ inline void Bar() {
 					<h2>What do they exactly mean?</h2>
 					<p>Let's discuss first some high level architectural overview of compilers</p>
 					<img src="https://2.bp.blogspot.com/-uilL1GOdl0E/WrVbVxsAxHI/AAAAAAAAAoU/oDi-ww1rx8I-xlHhmFHtUiLK_FgCUVajQCLcBGAs/s1600/DragonPony.png" style="width: 450px"></src>
-					<img src="pngegg.png" style="width: 350px"></src>
+					<img src="media/pngegg.png" style="width: 350px"></src>
 				</section>
 				<section data-auto-animate>
 					<ul data-id="compiler-list">
@@ -2261,7 +2261,7 @@ Also works in debug mode.
 				</section>
 				<section>
 					<h3>It really was a bug 😳</h3>
-					<img src="optbug.png" width="500px"></src>
+					<img src="media/optbug.png" width="500px"></src>
 					<p><a href="https://github.com/llvm/llvm-project/commit/60433c63acb71935111304d71e41b7ee982398f8">Source</a></p>
 				</section>
 				<section>
@@ -2269,7 +2269,7 @@ Also works in debug mode.
 <blockquote>
 	I change < to != and get +30% loop performance!
 </blockquote>
-					<img src="loop_thing.png" width="800px"></src>
+					<img src="media/loop_thing.png" width="800px"></src>
 				</section>
 				<section>
 					<p>-Rpass-missed=loop-vectorize</p>
@@ -2313,7 +2313,7 @@ BOOST_ITERATOR_FACADE_RANDOM_ACCESS_RELATION(>=, return 0 <=, distance_from)
 					</script></code></pre>
 				</section>
 				<section>
-					<img src="boost_delete.png" width="700px"></src>
+					<img src="media/boost_delete.png" width="700px"></src>
 					<a href="https://github.com/ClickHouse/ClickHouse/pull/9498">https://github.com/ClickHouse/ClickHouse/pull/9498</a>
 				</section>
 				<section>
@@ -2407,7 +2407,7 @@ BOOST_ITERATOR_FACADE_RANDOM_ACCESS_RELATION(>=, return 0 <=, distance_from)
 				</section>
 				<section data-background-color="rgb(255, 255, 255)">
 					<!-- <h2>WARNING: My experience: I might be wrong!</h2> -->
-					<img src="architecture_diagram.png" width="900px"></src>
+					<img src="media/architecture_diagram.png" width="900px"></src>
 				</section>
 				<section data-markdown>
 					Point 5: Compilers assume really old hardware (e.g. core2 for x86, 2006), use better options
@@ -2530,7 +2530,7 @@ int main(int , char* argv[]) {
 				</section>
 				<section>
 Another problem: <a href="https://www.intel.com/content/dam/support/us/en/documents/processors/mitigations-jump-conditional-code-erratum.pdf">Jump Conditional Code Erratum</a>
-<img src="erratum.jpg"></src>
+<img src="media/erratum.jpg"></src>
 				</section>
 				<section data-markdown>
 					* `-mbranches-within-32B-boundaries`
@@ -2571,7 +2571,7 @@ Another problem: <a href="https://www.intel.com/content/dam/support/us/en/docume
 				</section>
 				<section>
 					C++20 char8_t is one of the best features for performance. It allows to specify non overlapping pointers
-					<img src="char8t.png"></src>
+					<img src="media/char8t.png"></src>
 					<a href="https://github.com/ClickHouse/ClickHouse/pull/9304">Source: ClickHouse</a>
 				</section>
 				<section>
