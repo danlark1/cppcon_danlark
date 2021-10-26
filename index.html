@@ -1,0 +1,2776 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	  <link rel="stylesheet" href="css/print/pdf.css" media="print">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section data-background="title.png">
+				</section>
+				<section data-auto-animate>
+					<h2 style="margin-top: -200px;">Who am I?</h2>
+					<ul>
+						<li>Senior Software Engineer at Google</li>
+						<li data-id="dfe">Data Pipelining Efficiency and Infrastructure (MapReduce and more)</li>
+						<li data-id="search">In the past Core Search Engine at Yandex</li>
+						<li data-id="ch">ClickHouse infra and efficiency</li>
+						<li>C++ library and compiler contributor</li>
+						<li>C++ teacher in universities</li>
+					</ul>
+				</section>
+<!-- 				<section data-auto-animate>
+					<ul>
+						<li data-id="dfe">Data Pipelining Efficiency at Google</li>
+						<li data-id="search">Core Search Engine at Yandex</li>
+						<li data-id="ch">ClickHouse</li>
+					</ul>
+				</section> -->
+				<section>
+					<h2>There is a rumor going on...</h2>
+					<ul>
+						<li class="fragment" style="color:green">You should trust your compiler</li>
+						<li class="fragment" style="color:orange">Compilers are smart</li>
+						<li class="fragment" style="color:brown">Don't overoptimize</li>
+						<li class="fragment" style="color:red;">C++ is fast</li>
+					</ul>
+				</section>
+				<section data-auto-animate>
+					<p>People don't understand how compiler works after thousands hours of practicing</p>
+					<pre><code class="cpp" data-trim>
+						static constexpr auto foo() noexcept -> auto&&
+					</code></pre>
+				</section>
+				<section>
+					<p style="margin-left: -500px;">We prioritize freedom</p>
+					<ul>
+						<li>No centralized build system or a compiler</li>
+					</ul>
+					<p style="margin-left: -375px;">People choose C++ to control</p>
+					<p style="margin-left: -70px;">But they have no idea of the compiler internals</p>
+					<img src="https://cdn.guru99.com/images/stories/blackbox.png"></src>
+				</section>
+				<section data-auto-animate>
+					But either way you and companies choose to write C++
+					<ul style="margin-left: -375px;">
+						<li data-id="speed">
+					      Speed
+						</li>
+						<li>Expressiveness</li>
+						<li>History</li>
+						<li>Knowledge</li>
+						<li>Hiring</li>
+						<li>Library Ecosystem</li>
+						<li data-id="tool">
+								Tooling
+						</li>
+						<li>Put your reason here</li>
+					</ul>
+				</section>
+				<section data-auto-animate>
+					<h2 data-id="compiler">Compiler level</h2>
+					<ul>
+						<li data-id="speed">Speed</li>
+						<li data-id="tool">Tooling</li>
+					</ul>
+				</section>
+				<section data-auto-animate>
+					<h2 data-id="compiler">Compilers</h2>
+					<img src="https://upload.wikimedia.org/wikipedia/commons/a/af/GNU_Compiler_Collection_logo.svg" width="150"></src>
+					<img data-id="llvm" src="https://upload.wikimedia.org/wikipedia/commons/5/57/LLVM_New_Logo.png" width="320"></src>
+					<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Visual_Studio_Icon_2019.svg/1200px-Visual_Studio_Icon_2019.svg.png" width="190"></src>
+					<img src="https://www.qbssoftware.com/image/cache/catalog/qbs/intcplcomp-550x550.png" width="270"></src>
+					And <a href="https://en.cppreference.com/w/cpp/compiler_support">others</a>
+				</section>
+				<section data-auto-animate>
+					<img data-id="llvm" src="https://upload.wikimedia.org/wikipedia/commons/5/57/LLVM_New_Logo.png" width="500"></src>
+					<p>
+						Focusing more on Clang/LLVM. Most points are available for GCC also
+					</p>
+				</section>
+				<section data-markdown>
+					<script type="text/template">
+						1800+ options to configure your compiler
+						```html
+						--amdgpu-arch-tool
+						--analyze
+						--analyzer-no-default-checks
+						--analyzer-output
+						--ansi
+						--assemble
+						--assert
+						--autocomplete
+						--bootclasspath
+						--CLASSPATH
+						--classpath
+						--comments
+						--comments-in-macros
+						--compile
+						--config
+						--constant-cfstrings
+						--coverage
+						--cuda-compile-host-device
+						--cuda-device-only
+						--cuda-gpu-arch
+						--cuda-host-only
+						--cuda-include-ptx
+						--cuda-noopt-device-debug
+						--cuda-path
+						--cuda-path-ignore-env
+						--debug
+						--define-macro
+						--dependencies
+						--dyld-prefix
+						--emit-static-lib
+						--encoding
+						--entry
+						--extdirs
+						--extra-warnings
+						--for-linker
+						--force-link
+						--gcc-toolchain
+						--gpu-bundle-output
+						--gpu-instrument-lib
+						--gpu-max-threads-per-block
+						--help
+						--help-hidden
+						--hip-device-lib
+						--hip-device-lib-path
+						--hip-link
+						--hip-path
+						--hip-version
+						--imacros
+						--include
+						--include-barrier
+						--include-directory
+						--include-directory-after
+						--include-prefix
+						--include-with-prefix
+						--include-with-prefix-after
+						--include-with-prefix-before
+						--language
+						--ld-path
+						--libomptarget-amdgcn-bc-path
+						--libomptarget-nvptx-bc-path
+						--library-directory
+						--mhwdiv
+						--migrate
+						--no-cuda-include-ptx
+						--no-cuda-noopt-device-debug
+						--no-cuda-version-check
+						--no-gpu-bundle-output
+						--no-integrated-cpp
+						--no-line-commands
+						--no-offload-arch
+						--no-pedantic
+						--no-standard-includes
+						--no-standard-libraries
+						--no-system-header-prefix
+						--no-undefined
+						--no-warnings
+						--offload-arch
+						--optimize
+						--output
+						--output-class-directory
+						--param
+						--pedantic
+						--pedantic-errors
+						--pipe
+						--precompile
+						--prefix
+						--preprocess
+						--print-diagnostic-categories
+						--print-effective-triple
+						--print-file-name
+						--print-libgcc-file-name
+						--print-missing-file-dependencies
+						--print-multi-directory
+						--print-multi-lib
+						--print-multiarch
+						--print-prog-name
+						--print-resource-dir
+						--print-rocm-search-dirs
+						--print-runtime-dir
+						--print-search-dirs
+						--print-supported-cpus
+						--print-target-triple
+						--print-targets
+						--profile
+						--profile-blocks
+						--ptxas-path
+						--relocatable-pch
+						--resource
+						--rocm-device-lib-path
+						--rocm-path
+						--rtlib
+						--save-stats
+						--save-temps
+						--serialize-diagnostics
+						--shared
+						--signed-char
+						--specs
+						--static
+						--std
+						--stdlib
+						--sysroot
+						--system-header-prefix
+						--target
+						--target-help
+						--trace-includes
+						--traditional
+						--traditional-cpp
+						--trigraphs
+						--undefine-macro
+						--unsigned-char
+						--unwindlib
+						--user-dependencies
+						--verbose
+						--verify-debug-info
+						--version
+						--warn-
+						--write-dependencies
+						--write-user-dependencies
+						-a
+						-A
+						-A-
+						-all_load
+						-allowable_client
+						-ansi
+						-arch
+						-arch_errors_fatal
+						-arch_only
+						-arcmt-migrate-emit-errors
+						-arcmt-migrate-report-output
+						-B
+						-b
+						-bind_at_load
+						-bundle
+						-bundle_loader
+						-c
+						-C
+						-CC
+						-cl-denorms-are-zero
+						-cl-fast-relaxed-math
+						-cl-finite-math-only
+						-cl-fp32-correctly-rounded-divide-sqrt
+						-cl-kernel-arg-info
+						-cl-mad-enable
+						-cl-mad-enable.
+						-cl-no-signed-zeros
+						-cl-no-stdinc
+						-cl-opt-disable
+						-cl-single-precision-constant
+						-cl-std
+						-cl-strict-aliasing
+						-cl-uniform-work-group-size
+						-cl-unsafe-math-optimizations
+						-client_name
+						-compatibility_version
+						-coverage
+						-cuid
+						-current_version
+						-cxx-isystem
+						-D
+						-d
+						-dA
+						-dD
+						-dead_strip
+						-dependency-dot
+						-dependency-file
+						-dI
+						-dM
+						-dsym-dir
+						-dumpmachine
+						-dumpversion
+						-dylib_file
+						-dylinker
+						-dylinker_install_name
+						-dynamic
+						-dynamiclib
+						-E
+						-e
+						-EB
+						-EL
+						-emit-ast
+						-emit-interface-stubs
+						-emit-llvm
+						-emit-merged-ifs
+						-emit-module
+						-enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang
+						-exported_symbols_list
+						-F
+						-faapcs-bitfield-load
+						-faapcs-bitfield-width
+						-faccess-control
+						-faddrsig
+						-faggressive-function-elimination
+						-falign-commons
+						-falign-functions
+						-falign-loops
+						-faligned-allocation
+						-faligned-new
+						-fall-intrinsics
+						-fallow-editor-placeholders
+						-fallow-unsupported
+						-faltivec
+						-faltivec-src-compat
+						-fansi-escape-codes
+						-fapple-kext
+						-fapple-link-rtlib
+						-fapple-pragma-pack
+						-fapplication-extension
+						-fapprox-func
+						-fasm
+						-fasm-blocks
+						-fassociative-math
+						-fassume-sane-operator-new
+						-fast
+						-fastcp
+						-fastf
+						-fasync-exceptions
+						-fasynchronous-unwind-tables
+						-fauto-profile
+						-fauto-profile-accurate
+						-fautolink
+						-fautomatic
+						-fbacktrace
+						-fbasic-block-sections
+						-fbinutils-version
+						-fblas-matmul-limit
+						-fblocks
+						-fbootclasspath
+						-fborland-extensions
+						-fbounds-check
+						-fbracket-depth
+						-fbuild-session-file
+						-fbuild-session-timestamp
+						-fbuiltin
+						-fbuiltin-module-map
+						-fc
+						-fcall-saved-x10
+						-fcall-saved-x11
+						-fcall-saved-x12
+						-fcall-saved-x13
+						-fcall-saved-x14
+						-fcall-saved-x15
+						-fcall-saved-x18
+						-fcall-saved-x8
+						-fcall-saved-x9
+						-fcaret-diagnostics
+						-fcf-protection
+						-fcf-runtime-abi
+						-fchar8_t
+						-fcheck
+						-fcheck-array-temporaries
+						-fclang-abi-compat
+						-fclasspath
+						-fcoarray
+						-fcolor-diagnostics
+						-fcomment-block-commands
+						-fcommon
+						-fcompile-resource
+						-fcomplete-member-pointers
+						-fconstant-cfstrings
+						-fconstant-string-class
+						-fconstexpr-backtrace-limit
+						-fconstexpr-depth
+						-fconstexpr-steps
+						-fconvergent-functions
+						-fconvert
+						-fcoroutines-ts
+						-fcoverage-compilation-dir
+						-fcoverage-mapping
+						-fcoverage-prefix-map
+						-fcrash-diagnostics-dir
+						-fcray-pointer
+						-fcreate-profile
+						-fcs-profile-generate
+						-fcuda-approx-transcendentals
+						-fcuda-flush-denormals-to-zero
+						-fcuda-rdc
+						-fcuda-short-ptr
+						-fcxx-exceptions
+						-fcxx-modules
+						-fd-lines-as-code
+						-fd-lines-as-comments
+						-fdata-sections
+						-fdebug-compilation-dir
+						-fdebug-default-version
+						-fdebug-info-for-profiling
+						-fdebug-macro
+						-fdebug-pass-arguments
+						-fdebug-pass-structure
+						-fdebug-prefix-map
+						-fdebug-ranges-base-address
+						-fdebug-types-section
+						-fdeclspec
+						-fdelayed-template-parsing
+						-fdelete-null-pointer-checks
+						-fdenormal-fp-math
+						-fdepfile-entry
+						-fdiagnostics-absolute-paths
+						-fdiagnostics-color
+						-fdiagnostics-fixit-info
+						-fdiagnostics-format
+						-fdiagnostics-hotness-threshold
+						-fdiagnostics-parseable-fixits
+						-fdiagnostics-print-source-range-info
+						-fdiagnostics-show-category
+						-fdiagnostics-show-hotness
+						-fdiagnostics-show-note-include-stack
+						-fdiagnostics-show-option
+						-fdiagnostics-show-template-tree
+						-fdigraphs
+						-fdirect-access-external-data
+						-fdiscard-value-names
+						-fdollar-ok
+						-fdollars-in-identifiers
+						-fdouble-square-bracket-attributes
+						-fdump-fortran-optimized
+						-fdump-fortran-original
+						-fdump-parse-tree
+						-fdwarf-directory-asm
+						-fdwarf-exceptions
+						-felide-constructors
+						-feliminate-unused-debug-symbols
+						-feliminate-unused-debug-types
+						-fembed-bitcode
+						-fembed-bitcode-marker
+						-femit-all-decls
+						-femulated-tls
+						-fenable-matrix
+						-fencoding
+						-ferror-limit
+						-fescaping-block-tail-calls
+						-fexceptions
+						-fexec-charset
+						-fexperimental-isel
+						-fexperimental-new-constant-interpreter
+						-fexperimental-relative-c
+						-fexperimental-strict-floating-point
+						-fextdirs
+						-fextend-arguments
+						-fexternal-blas
+						-ff2c
+						-ffast-math
+						-ffile-compilation-dir
+						-ffile-prefix-map
+						-ffine-grained-bitfield-accesses
+						-ffinite-loops
+						-ffinite-math-only
+						-ffixed-a0
+						-ffixed-a1
+						-ffixed-a2
+						-ffixed-a3
+						-ffixed-a4
+						-ffixed-a5
+						-ffixed-a6
+						-ffixed-d0
+						-ffixed-d1
+						-ffixed-d2
+						-ffixed-d3
+						-ffixed-d4
+						-ffixed-d5
+						-ffixed-d6
+						-ffixed-d7
+						-ffixed-point
+						-ffixed-r19
+						-ffixed-r9
+						-ffixed-x1
+						-ffixed-x10
+						-ffixed-x11
+						-ffixed-x12
+						-ffixed-x13
+						-ffixed-x14
+						-ffixed-x15
+						-ffixed-x16
+						-ffixed-x17
+						-ffixed-x18
+						-ffixed-x19
+						-ffixed-x2
+						-ffixed-x20
+						-ffixed-x21
+						-ffixed-x22
+						-ffixed-x23
+						-ffixed-x24
+						-ffixed-x25
+						-ffixed-x26
+						-ffixed-x27
+						-ffixed-x28
+						-ffixed-x29
+						-ffixed-x3
+						-ffixed-x30
+						-ffixed-x31
+						-ffixed-x4
+						-ffixed-x5
+						-ffixed-x6
+						-ffixed-x7
+						-ffixed-x8
+						-ffixed-x9
+						-ffor-scope
+						-fforce-dwarf-frame
+						-fforce-emit-vtables
+						-fforce-enable-int128
+						-ffp-contract
+						-ffp-exception-behavior
+						-ffp-model
+						-ffpe-trap
+						-ffree-line-length-
+						-ffreestanding
+						-ffrontend-optimize
+						-ffunction-sections
+						-fglobal-isel
+						-fgnu-inline-asm
+						-fgnu-keywords
+						-fgnu-runtime
+						-fgnu89-inline
+						-fgnuc-version
+						-fgpu-allow-device-init
+						-fgpu-defer-diag
+						-fgpu-flush-denormals-to-zero
+						-fgpu-rdc
+						-fgpu-sanitize
+						-fheinous-gnu-extensions
+						-fhip-fp32-correctly-rounded-divide-sqrt
+						-fhip-new-launch-api
+						-fhonor-infinites
+						-fhonor-infinities
+						-fhonor-nans
+						-fhosted
+						-fident
+						-fignore-exceptions
+						-filelist
+						-fimplicit-module-maps
+						-fimplicit-modules
+						-findirect-virtual-calls
+						-finit-character
+						-finit-integer
+						-finit-local-zero
+						-finit-logical
+						-finit-real
+						-finline-functions
+						-finline-hint-functions
+						-finput-charset
+						-finstrument-function-entry-bare
+						-finstrument-functions
+						-finstrument-functions-after-inlining
+						-finteger-4-integer-8
+						-fintegrated-as
+						-fintegrated-cc1
+						-fjump-tables
+						-fkeep-static-consts
+						-flat_namespace
+						-flax-vector-conversions
+						-flegacy-pass-manager
+						-flimited-precision
+						-flto
+						-flto-jobs
+						-fmacro-backtrace-limit
+						-fmacro-prefix-map
+						-fmath-errno
+						-fmax-array-constructor
+						-fmax-errors
+						-fmax-identifier-length
+						-fmax-stack-var-size
+						-fmax-subrecord-length
+						-fmax-tokens
+						-fmax-type-align
+						-fmemory-profile
+						-fmerge-all-constants
+						-fmessage-length
+						-fminimize-whitespace
+						-fmodule-file
+						-fmodule-file-deps
+						-fmodule-implementation-of
+						-fmodule-map-file
+						-fmodule-maps
+						-fmodule-name
+						-fmodule-private
+						-fmodules
+						-fmodules-cache-path
+						-fmodules-decluse
+						-fmodules-disable-diagnostic-validation
+						-fmodules-ignore-macro
+						-fmodules-prune-after
+						-fmodules-prune-interval
+						-fmodules-search-all
+						-fmodules-strict-decluse
+						-fmodules-ts
+						-fmodules-user-build-path
+						-fmodules-validate-input-files-content
+						-fmodules-validate-once-per-build-session
+						-fmodules-validate-system-headers
+						-fms-compatibility
+						-fms-compatibility-version
+						-fms-extensions
+						-fms-memptr-rep
+						-fms-volatile
+						-fmsc-version
+						-fmudflap
+						-fmudflapth
+						-fnested-functions
+						-fnew-alignment
+						-fnew-infallible
+						-fnext-runtime
+						-fno-aapcs-bitfield-width
+						-fno-access-control
+						-fno-addrsig
+						-fno-aggressive-function-elimination
+						-fno-align-commons
+						-fno-align-functions
+						-fno-aligned-allocation
+						-fno-all-intrinsics
+						-fno-allow-editor-placeholders
+						-fno-altivec
+						-fno-apple-pragma-pack
+						-fno-application-extension
+						-fno-approx-func
+						-fno-asm
+						-fno-asm-blocks
+						-fno-associative-math
+						-fno-assume-sane-operator-new
+						-fno-async-exceptions
+						-fno-asynchronous-unwind-tables
+						-fno-autolink
+						-fno-automatic
+						-fno-backtrace
+						-fno-blocks
+						-fno-borland-extensions
+						-fno-bounds-check
+						-fno-builtin
+						-fno-builtin-
+						-fno-c
+						-fno-caret-diagnostics
+						-fno-char8_t
+						-fno-check-array-temporaries
+						-fno-color-diagnostics
+						-fno-common
+						-fno-complete-member-pointers
+						-fno-constant-cfstrings
+						-fno-coroutines-ts
+						-fno-coverage-mapping
+						-fno-crash-diagnostics
+						-fno-cray-pointer
+						-fno-cuda-approx-transcendentals
+						-fno-cuda-short-ptr
+						-fno-cxx-exceptions
+						-fno-cxx-modules
+						-fno-d-lines-as-code
+						-fno-d-lines-as-comments
+						-fno-data-sections
+						-fno-debug-info-for-profiling
+						-fno-debug-macro
+						-fno-debug-ranges-base-address
+						-fno-debug-types-section
+						-fno-declspec
+						-fno-delayed-template-parsing
+						-fno-delete-null-pointer-checks
+						-fno-diagnostics-color
+						-fno-diagnostics-fixit-info
+						-fno-diagnostics-show-hotness
+						-fno-diagnostics-show-note-include-stack
+						-fno-diagnostics-show-option
+						-fno-digraphs
+						-fno-direct-access-external-data
+						-fno-discard-value-names
+						-fno-dollar-ok
+						-fno-dollars-in-identifiers
+						-fno-double-square-bracket-attributes
+						-fno-dump-fortran-optimized
+						-fno-dump-fortran-original
+						-fno-dump-parse-tree
+						-fno-dwarf-directory-asm
+						-fno-elide-constructors
+						-fno-elide-type
+						-fno-eliminate-unused-debug-symbols
+						-fno-eliminate-unused-debug-types
+						-fno-emulated-tls
+						-fno-escaping-block-tail-calls
+						-fno-exceptions
+						-fno-experimental-new-pass-manager
+						-fno-experimental-relative-c
+						-fno-external-blas
+						-fno-f2c
+						-fno-fast-math
+						-fno-fine-grained-bitfield-accesses
+						-fno-finite-loops
+						-fno-finite-math-only
+						-fno-fixed-point
+						-fno-for-scope
+						-fno-force-dwarf-frame
+						-fno-force-emit-vtables
+						-fno-force-enable-int128
+						-fno-frontend-optimize
+						-fno-function-sections
+						-fno-global-isel
+						-fno-gnu-inline-asm
+						-fno-gnu-keywords
+						-fno-gnu89-inline
+						-fno-gpu-allow-device-init
+						-fno-gpu-defer-diag
+						-fno-gpu-flush-denormals-to-zero
+						-fno-gpu-rdc
+						-fno-gpu-sanitize
+						-fno-hip-fp32-correctly-rounded-divide-sqrt
+						-fno-hip-new-launch-api
+						-fno-honor-infinities
+						-fno-honor-nans
+						-fno-ident
+						-fno-implicit-module-maps
+						-fno-implicit-modules
+						-fno-init-local-zero
+						-fno-inline-functions
+						-fno-integer-4-integer-8
+						-fno-integrated-as
+						-fno-integrated-cc1
+						-fno-jump-tables
+						-fno-keep-static-consts
+						-fno-lax-vector-conversions
+						-fno-legacy-pass-manager
+						-fno-limit-debug-info
+						-fno-math-errno
+						-fno-max-identifier-length
+						-fno-max-type-align
+						-fno-memory-profile
+						-fno-merge-all-constants
+						-fno-minimize-whitespace
+						-fno-module-file-deps
+						-fno-module-private
+						-fno-modules
+						-fno-modules-decluse
+						-fno-modules-search-all
+						-fno-modules-validate-system-headers
+						-fno-ms-compatibility
+						-fno-ms-extensions
+						-fno-objc-arc
+						-fno-objc-arc-exceptions
+						-fno-objc-convert-messages-to-runtime-calls
+						-fno-objc-encode-cxx-class-template-spec
+						-fno-objc-exceptions
+						-fno-objc-infer-related-result-type
+						-fno-objc-legacy-dispatch
+						-fno-objc-nonfragile-abi
+						-fno-objc-weak
+						-fno-omit-frame-pointer
+						-fno-openmp
+						-fno-openmp-extensions
+						-fno-openmp-simd
+						-fno-openmp-target-debug
+						-fno-openmp-target-new-runtime
+						-fno-operator-names
+						-fno-optimize-sibling-calls
+						-fno-pack-derived
+						-fno-pack-struct
+						-fno-pascal-strings
+						-fno-pch-codegen
+						-fno-pch-debuginfo
+						-fno-pch-instantiate-templates
+						-fno-PIC
+						-fno-pic
+						-fno-PIE
+						-fno-pie
+						-fno-plt
+						-fno-prebuilt-implicit-modules
+						-fno-preserve-as-comments
+						-fno-profile-arcs
+						-fno-profile-generate
+						-fno-profile-instr-generate
+						-fno-profile-instr-use
+						-fno-profile-sample-accurate
+						-fno-profile-sample-use
+						-fno-protect-parens
+						-fno-pseudo-probe-for-profiling
+						-fno-range-check
+						-fno-real-4-real-10
+						-fno-real-4-real-16
+						-fno-real-4-real-8
+						-fno-real-8-real-10
+						-fno-real-8-real-16
+						-fno-real-8-real-4
+						-fno-realloc-lhs
+						-fno-reciprocal-math
+						-fno-record-command-line
+						-fno-recursive
+						-fno-register-global-dtors-with-atexit
+						-fno-relaxed-template-template-args
+						-fno-repack-arrays
+						-fno-reroll-loops
+						-fno-rewrite-imports
+						-fno-rewrite-includes
+						-fno-ropi
+						-fno-rounding-math
+						-fno-rtlib-add-rpath
+						-fno-rtti
+						-fno-rtti-data
+						-fno-rwpi
+						-fno-sanitize
+						-fno-sanitize-address-outline-instrumentation
+						-fno-sanitize-address-poison-custom-array-cookie
+						-fno-sanitize-address-use-after-scope
+						-fno-sanitize-address-use-odr-indicator
+						-fno-sanitize-blacklist
+						-fno-sanitize-cfi-canonical-jump-tables
+						-fno-sanitize-cfi-cross-dso
+						-fno-sanitize-coverage
+						-fno-sanitize-hwaddress-experimental-aliasing
+						-fno-sanitize-ignorelist
+						-fno-sanitize-link-c
+						-fno-sanitize-link-runtime
+						-fno-sanitize-memory-track-origins
+						-fno-sanitize-memory-use-after-dtor
+						-fno-sanitize-minimal-runtime
+						-fno-sanitize-recover
+						-fno-sanitize-stats
+						-fno-sanitize-thread-atomics
+						-fno-sanitize-thread-func-entry-exit
+						-fno-sanitize-thread-memory-access
+						-fno-sanitize-trap
+						-fno-save-optimization-record
+						-fno-second-underscore
+						-fno-semantic-interposition
+						-fno-short-enums
+						-fno-short-wchar
+						-fno-show-column
+						-fno-show-source-location
+						-fno-sign-zero
+						-fno-signaling-math
+						-fno-signed-char
+						-fno-signed-zeros
+						-fno-sized-deallocation
+						-fno-slp-vectorize
+						-fno-spell-checking
+						-fno-split-dwarf-inlining
+						-fno-split-lto-unit
+						-fno-split-machine-functions
+						-fno-split-stack
+						-fno-stack-arrays
+						-fno-stack-clash-protection
+						-fno-stack-protector
+						-fno-stack-size-section
+						-fno-standalone-debug
+						-fno-strict-aliasing
+						-fno-strict-enums
+						-fno-strict-float-cast-overflow
+						-fno-strict-modules-decluse
+						-fno-strict-overflow
+						-fno-strict-return
+						-fno-strict-vtable-pointers
+						-fno-struct-path-tbaa
+						-fno-sycl
+						-fno-temp-file
+						-fno-test-coverage
+						-fno-threadsafe-statics
+						-fno-trapping-math
+						-fno-trigraphs
+						-fno-underscoring
+						-fno-unique-basic-block-section-names
+						-fno-unique-internal-linkage-names
+						-fno-unique-section-names
+						-fno-unit-at-a-time
+						-fno-unroll-loops
+						-fno-unsafe-math-optimizations
+						-fno-unsigned-char
+						-fno-unwind-tables
+						-fno-use-cxa-atexit
+						-fno-use-init-array
+						-fno-use-line-directives
+						-fno-vectorize
+						-fno-verbose-asm
+						-fno-virtual-function-elimination
+						-fno-visibility-from-dllstorageclass
+						-fno-visibility-inlines-hidden
+						-fno-visibility-inlines-hidden-static-local-var
+						-fno-whole-file
+						-fno-whole-program-vtables
+						-fno-working-directory
+						-fno-wrapv
+						-fno-xl-pragma-pack
+						-fno-xray-always-emit-customevents
+						-fno-xray-always-emit-typedevents
+						-fno-xray-function-index
+						-fno-xray-ignore-loops
+						-fno-xray-instrument
+						-fno-zero-initialized-in-bss
+						-fno-zvector
+						-fno_modules-validate-input-files-content
+						-fno_pch-validate-input-files-content
+						-fnoxray-link-deps
+						-fobjc-abi-version
+						-fobjc-arc
+						-fobjc-arc-exceptions
+						-fobjc-convert-messages-to-runtime-calls
+						-fobjc-disable-direct-methods-for-testing
+						-fobjc-encode-cxx-class-template-spec
+						-fobjc-exceptions
+						-fobjc-infer-related-result-type
+						-fobjc-legacy-dispatch
+						-fobjc-link-runtime
+						-fobjc-nonfragile-abi
+						-fobjc-nonfragile-abi-version
+						-fobjc-runtime
+						-fobjc-sender-dependent-dispatch
+						-fobjc-weak
+						-foffload-lto
+						-fomit-frame-pointer
+						-fopenmp
+						-fopenmp-extensions
+						-fopenmp-simd
+						-fopenmp-target-debug
+						-fopenmp-target-new-runtime
+						-fopenmp-targets
+						-fopenmp-version
+						-foperator-arrow-depth
+						-foperator-names
+						-foptimization-record-file
+						-foptimization-record-passes
+						-foptimize-sibling-calls
+						-force_cpusubtype_ALL
+						-force_flat_namespace
+						-force_load
+						-forder-file-instrumentation
+						-foutput-class-dir
+						-fpack-derived
+						-fpack-struct
+						-fparse-all-comments
+						-fpascal-strings
+						-fpass-plugin
+						-fpatchable-function-entry
+						-fpcc-struct-return
+						-fpch-codegen
+						-fpch-debuginfo
+						-fpch-instantiate-templates
+						-fpch-preprocess
+						-fpch-validate-input-files-content
+						-fPIC
+						-fpic
+						-fPIE
+						-fpie
+						-fplt
+						-fplugin
+						-fprebuilt-implicit-modules
+						-fprebuilt-module-path
+						-fpreserve-as-comments
+						-fproc-stat-report
+						-fprofile-arcs
+						-fprofile-dir
+						-fprofile-exclude-files
+						-fprofile-filter-files
+						-fprofile-generate
+						-fprofile-instr-generate
+						-fprofile-instr-use
+						-fprofile-list
+						-fprofile-remapping-file
+						-fprofile-sample-accurate
+						-fprofile-sample-use
+						-fprofile-update
+						-fprofile-use
+						-fprotect-parens
+						-fpseudo-probe-for-profiling
+						-framework
+						-frange-check
+						-freal-4-real-10
+						-freal-4-real-16
+						-freal-4-real-8
+						-freal-8-real-10
+						-freal-8-real-16
+						-freal-8-real-4
+						-frealloc-lhs
+						-freciprocal-math
+						-frecord-command-line
+						-frecord-gcc-switches
+						-frecord-marker
+						-frecursive
+						-freg-struct-return
+						-fregister-global-dtors-with-atexit
+						-frelaxed-template-template-args
+						-frepack-arrays
+						-freroll-loops
+						-fretain-comments-from-system-headers
+						-frewrite-imports
+						-frewrite-includes
+						-frewrite-map-file
+						-fropi
+						-frounding-math
+						-frtlib-add-rpath
+						-frtti
+						-frtti-data
+						-frwpi
+						-fsanitize
+						-fsanitize-address-destructor
+						-fsanitize-address-field-padding
+						-fsanitize-address-globals-dead-stripping
+						-fsanitize-address-outline-instrumentation
+						-fsanitize-address-poison-custom-array-cookie
+						-fsanitize-address-use-after-return
+						-fsanitize-address-use-after-scope
+						-fsanitize-address-use-odr-indicator
+						-fsanitize-blacklist
+						-fsanitize-cfi-canonical-jump-tables
+						-fsanitize-cfi-cross-dso
+						-fsanitize-cfi-icall-generalize-pointers
+						-fsanitize-coverage
+						-fsanitize-coverage-allowlist
+						-fsanitize-coverage-blacklist
+						-fsanitize-coverage-ignorelist
+						-fsanitize-coverage-whitelist
+						-fsanitize-hwaddress-abi
+						-fsanitize-hwaddress-experimental-aliasing
+						-fsanitize-ignorelist
+						-fsanitize-link-c
+						-fsanitize-link-runtime
+						-fsanitize-memory-track-origins
+						-fsanitize-memory-use-after-dtor
+						-fsanitize-minimal-runtime
+						-fsanitize-recover
+						-fsanitize-stats
+						-fsanitize-system-blacklist
+						-fsanitize-system-ignorelist
+						-fsanitize-thread-atomics
+						-fsanitize-thread-func-entry-exit
+						-fsanitize-thread-memory-access
+						-fsanitize-trap
+						-fsanitize-undefined-strip-path-components
+						-fsanitize-undefined-trap-on-error
+						-fsave-optimization-record
+						-fsave-optimization-record.
+						-fsecond-underscore
+						-fseh-exceptions
+						-fsemantic-interposition
+						-fshort-enums
+						-fshort-wchar
+						-fshow-column
+						-fshow-overloads
+						-fshow-skipped-includes
+						-fshow-source-location
+						-fsign-zero
+						-fsignaling-math
+						-fsigned-bitfields
+						-fsigned-char
+						-fsigned-zeros
+						-fsized-deallocation
+						-fsjlj-exceptions
+						-fslp-vectorize
+						-fspell-checking
+						-fspell-checking-limit
+						-fsplit-dwarf-inlining
+						-fsplit-lto-unit
+						-fsplit-machine-functions
+						-fsplit-stack
+						-fstack-arrays
+						-fstack-clash-protection
+						-fstack-protector
+						-fstack-protector-all
+						-fstack-protector-strong
+						-fstack-size-section
+						-fstack-usage
+						-fstandalone-debug
+						-fstrict-aliasing
+						-fstrict-enums
+						-fstrict-float-cast-overflow
+						-fstrict-overflow
+						-fstrict-return
+						-fstrict-vtable-pointers
+						-fstruct-path-tbaa
+						-fswift-async-fp
+						-fsycl
+						-fsymbol-partition
+						-fsyntax-only
+						-fsystem-module
+						-ftabstop
+						-ftemplate-backtrace-limit
+						-ftemplate-depth
+						-ftemplate-depth-
+						-fterminated-vtables
+						-ftest-coverage
+						-fthin-link-bitcode
+						-fthinlto-index
+						-fthreadsafe-statics
+						-ftime-report
+						-ftime-trace
+						-ftime-trace-granularity
+						-ftls-model
+						-ftrap-function
+						-ftrapping-math
+						-ftrapv
+						-ftrapv-handler
+						-ftree-slp-vectorize
+						-ftree-vectorize
+						-ftrigraphs
+						-ftrivial-auto-var-init
+						-ftrivial-auto-var-init-stop-after
+						-funderscoring
+						-funique-basic-block-section-names
+						-funique-internal-linkage-names
+						-funique-section-names
+						-funit-at-a-time
+						-funroll-loops
+						-funsafe-math-optimizations
+						-funsigned-bitfields
+						-funsigned-char
+						-funwind-tables
+						-fuse-cuid
+						-fuse-cxa-atexit
+						-fuse-init-array
+						-fuse-ld
+						-fuse-line-directives
+						-fvalidate-ast-input-files-content
+						-fveclib
+						-fvectorize
+						-fverbose-asm
+						-fvirtual-function-elimination
+						-fvisibility
+						-fvisibility-dllexport
+						-fvisibility-externs-dllimport
+						-fvisibility-externs-nodllstorageclass
+						-fvisibility-from-dllstorageclass
+						-fvisibility-global-new-delete-hidden
+						-fvisibility-inlines-hidden
+						-fvisibility-inlines-hidden-static-local-var
+						-fvisibility-ms-compat
+						-fvisibility-nodllstorageclass
+						-fwasm-exceptions
+						-fwhole-file
+						-fwhole-program-vtables
+						-fwrapv
+						-fwritable-strings
+						-fxl-pragma-pack
+						-fxray-always-emit-customevents
+						-fxray-always-emit-typedevents
+						-fxray-always-instrument
+						-fxray-attr-list
+						-fxray-function-groups
+						-fxray-function-index
+						-fxray-ignore-loops
+						-fxray-instruction-threshold
+						-fxray-instrument
+						-fxray-instrumentation-bundle
+						-fxray-link-deps
+						-fxray-modes
+						-fxray-never-instrument
+						-fxray-selected-function-group
+						-fzero-initialized-in-bss
+						-fzvector
+						-g
+						-G
+						-g
+						-g0
+						-g1
+						-g2
+						-g3
+						-gcodeview
+						-gcodeview-ghash
+						-gcolumn-info
+						-gdbx
+						-gdwarf
+						-gdwarf-2
+						-gdwarf-3
+						-gdwarf-4
+						-gdwarf-5
+						-gdwarf-aranges
+						-gdwarf32
+						-gdwarf64
+						-gembed-source
+						-gfull
+						-ggdb
+						-ggdb0
+						-ggdb1
+						-ggdb2
+						-ggdb3
+						-ggnu-pubnames
+						-ginline-line-tables
+						-gline-directives-only
+						-gline-tables-only
+						-glldb
+						-gmlt
+						-gmodules
+						-gno-codeview-ghash
+						-gno-column-info
+						-gno-embed-source
+						-gno-gnu-pubnames
+						-gno-inline-line-tables
+						-gno-pubnames
+						-gno-record-command-line
+						-gno-simple-template-names
+						-gno-split-dwarf
+						-gno-strict-dwarf
+						-gpubnames
+						-grecord-command-line
+						-grecord-gcc-switches
+						-gsce
+						-gsimple-template-names
+						-gsplit-dwarf
+						-gstrict-dwarf
+						-gused
+						-gz
+						-H
+						-headerpad_max_install_names
+						-help
+						-I
+						-I-
+						-ibuiltininc
+						-ibuiltininc.
+						-idirafter
+						-iframework
+						-iframeworkwithsysroot
+						-imacros
+						-image_base
+						-imultilib
+						-include
+						-include-pch
+						-index-header-map
+						-init
+						-install_name
+						-integrated-as
+						-interface-stub-version
+						-iprefix
+						-iquote
+						-isysroot
+						-isystem
+						-isystem-after
+						-ivfsoverlay
+						-iwithprefix
+						-iwithprefixbefore
+						-iwithsysroot
+						-keep_private_externs
+						-L
+						-l
+						-lazy_framework
+						-lazy_library
+						-M
+						-m16
+						-m32
+						-m3dnow
+						-m3dnowa
+						-m64
+						-m68000
+						-m68010
+						-m68020
+						-m68030
+						-m68040
+						-m68060
+						-m80387
+						-mabi
+						-mabicalls
+						-mabs
+						-Mach
+						-madx
+						-maes
+						-maix-struct-return
+						-malign-branch
+						-malign-branch-boundary
+						-malign-double
+						-maltivec
+						-mamdgpu-ieee
+						-mamx-bf16
+						-mamx-int8
+						-mamx-tile
+						-mappletvos-version-min
+						-mappletvsimulator-version-min
+						-march
+						-masm
+						-matomics
+						-mavx
+						-mavx2
+						-mavx512bf16
+						-mavx512bitalg
+						-mavx512bw
+						-mavx512cd
+						-mavx512dq
+						-mavx512er
+						-mavx512f
+						-mavx512fp16
+						-mavx512ifma
+						-mavx512pf
+						-mavx512vbmi
+						-mavx512vbmi2
+						-mavx512vl
+						-mavx512vnni
+						-mavx512vp2intersect
+						-mavx512vpopcntdq
+						-mavxvnni
+						-mbackchain
+						-mbig-endian
+						-mbmi
+						-mbmi2
+						-mbranch-protection
+						-mbranches-within-32B-boundaries
+						-mbulk-memory
+						-mcheck-zero-division
+						-mcldemote
+						-mclflushopt
+						-mclwb
+						-mclzero
+						-mcmodel
+						-mcmpb
+						-mcmse
+						-mcode-object-v3
+						-mcode-object-version
+						-mcompact-branches
+						-mconsole
+						-mcpu
+						-mcrbits
+						-mcrc
+						-mcrc32
+						-mcrypto
+						-mcumode
+						-mcx16
+						-MD
+						-mdefault-build-attributes
+						-mdirect-move
+						-mdll
+						-mdouble
+						-mdouble-float
+						-mdsp
+						-mdspr2
+						-mdynamic-no-pic
+						-meabi
+						-mefpu2
+						-membedded-data
+						-menable-experimental-extensions
+						-menable-unsafe-fp-math
+						-menqcmd
+						-mexception-handling
+						-mexec-model
+						-mexecute-only
+						-mextern-sdata
+						-MF
+						-mf16c
+						-mfentry
+						-mfix-cmse-cve-2021-35465
+						-mfix-cortex-a53-835769
+						-mfloat-abi
+						-mfloat128
+						-mfma
+						-mfma4
+						-mfp32
+						-mfp64
+						-mfpmath
+						-mfprnd
+						-mfpu
+						-mfsgsbase
+						-mfxsr
+						-MG
+						-mgeneral-regs-only
+						-mgfni
+						-mginv
+						-mglobal-merge
+						-mgpopt
+						-mhard-float
+						-mharden-sls
+						-mhreset
+						-mhtm
+						-mhvx
+						-mhvx-length
+						-mhwdiv
+						-mhwmult
+						-miamcu
+						-mieee-rnd-near
+						-mignore-xcoff-visibility
+						-mimplicit-float
+						-mimplicit-it
+						-mincremental-linker-compatible
+						-mindirect-jump
+						-minvariant-function-descriptors
+						-minvpcid
+						-mios-simulator-version-min
+						-mios-version-min
+						-miphoneos-version-min
+						-miphonesimulator-version-min
+						-mips16
+						-misel
+						-MJ
+						-mkernel
+						-mkl
+						-mldc1-sdc1
+						-mlinker-version
+						-mlittle-endian
+						-mllvm
+						-mlocal-sdata
+						-mlong-calls
+						-mlong-double-128
+						-mlong-double-64
+						-mlong-double-80
+						-mlongcall
+						-mlvi-cfi
+						-mlvi-hardening
+						-mlwp
+						-mlzcnt
+						-MM
+						-mmacos-version-min
+						-mmacosx-version-min
+						-mmadd4
+						-mmark-bti-property
+						-mmcu
+						-MMD
+						-mmemops
+						-mmfcrf
+						-mmfocrf
+						-mmicromips
+						-mmma
+						-mmmx
+						-mmovbe
+						-mmovdir64b
+						-mmovdiri
+						-mms-bitfields
+						-mmsa
+						-mmt
+						-mmultivalue
+						-mmutable-globals
+						-mmwaitx
+						-mnan
+						-mno-3dnow
+						-mno-3dnowa
+						-mno-abicalls
+						-mno-adx
+						-mno-aes
+						-mno-altivec
+						-mno-amdgpu-ieee
+						-mno-amx-bf16
+						-mno-amx-int8
+						-mno-amx-tile
+						-mno-atomics
+						-mno-avx
+						-mno-avx2
+						-mno-avx512bf16
+						-mno-avx512bitalg
+						-mno-avx512bw
+						-mno-avx512cd
+						-mno-avx512dq
+						-mno-avx512er
+						-mno-avx512f
+						-mno-avx512fp16
+						-mno-avx512ifma
+						-mno-avx512pf
+						-mno-avx512vbmi
+						-mno-avx512vbmi2
+						-mno-avx512vl
+						-mno-avx512vnni
+						-mno-avx512vp2intersect
+						-mno-avx512vpopcntdq
+						-mno-avxvnni
+						-mno-backchain
+						-mno-bmi
+						-mno-bmi2
+						-mno-bulk-memory
+						-mno-check-zero-division
+						-mno-cldemote
+						-mno-clflushopt
+						-mno-clwb
+						-mno-clzero
+						-mno-cmpb
+						-mno-code-object-v3
+						-mno-crbits
+						-mno-crc
+						-mno-crc32
+						-mno-crypto
+						-mno-cumode
+						-mno-cx16
+						-mno-default-build-attributes
+						-mno-direct-move
+						-mno-dsp
+						-mno-dspr2
+						-mno-embedded-data
+						-mno-enqcmd
+						-mno-exception-handling
+						-mno-execute-only
+						-mno-extern-sdata
+						-mno-f16c
+						-mno-fix-cmse-cve-2021-35465
+						-mno-fix-cortex-a53-835769
+						-mno-float128
+						-mno-fma
+						-mno-fma4
+						-mno-fprnd
+						-mno-fsgsbase
+						-mno-fxsr
+						-mno-gfni
+						-mno-ginv
+						-mno-global-merge
+						-mno-gpopt
+						-mno-hreset
+						-mno-htm
+						-mno-hvx
+						-mno-iamcu
+						-mno-implicit-float
+						-mno-incremental-linker-compatible
+						-mno-invariant-function-descriptors
+						-mno-invpcid
+						-mno-isel
+						-mno-kl
+						-mno-ldc1-sdc1
+						-mno-local-sdata
+						-mno-long-calls
+						-mno-longcall
+						-mno-lvi-cfi
+						-mno-lvi-hardening
+						-mno-lwp
+						-mno-lzcnt
+						-mno-madd4
+						-mno-memops
+						-mno-mfocrf
+						-mno-micromips
+						-mno-mips16
+						-mno-mma
+						-mno-mmx
+						-mno-movbe
+						-mno-movdir64b
+						-mno-movdiri
+						-mno-movt
+						-mno-ms-bitfields
+						-mno-msa
+						-mno-mt
+						-mno-multivalue
+						-mno-mutable-globals
+						-mno-mwaitx
+						-mno-neg-immediates
+						-mno-nontrapping-fptoint
+						-mno-nvj
+						-mno-nvs
+						-mno-omit-leaf-frame-pointer
+						-mno-outline
+						-mno-outline-atomics
+						-mno-packed-stack
+						-mno-packets
+						-mno-paired-vector-memops
+						-mno-pclmul
+						-mno-pconfig
+						-mno-pcrel
+						-mno-pku
+						-mno-popcnt
+						-mno-popcntd
+						-mno-power10-vector
+						-mno-power8-vector
+						-mno-power9-vector
+						-mno-prefetchwt1
+						-mno-prefixed
+						-mno-prfchw
+						-mno-ptwrite
+						-mno-rdpid
+						-mno-rdrnd
+						-mno-rdseed
+						-mno-red-zone
+						-mno-reference-types
+						-mno-relax
+						-mno-relax-all
+						-mno-relaxed-simd
+						-mno-restrict-it
+						-mno-retpoline
+						-mno-retpoline-external-thunk
+						-mno-rtd
+						-mno-rtm
+						-mno-sahf
+						-mno-save-restore
+						-mno-serialize
+						-mno-seses
+						-mno-sgx
+						-mno-sha
+						-mno-shstk
+						-mno-sign-ext
+						-mno-simd128
+						-mno-soft-float
+						-mno-spe
+						-mno-speculative-load-hardening
+						-mno-sse
+						-mno-sse2
+						-mno-sse3
+						-mno-sse4.1
+						-mno-sse4.2
+						-mno-sse4a
+						-mno-ssse3
+						-mno-stack-arg-probe
+						-mno-stackrealign
+						-mno-tail-call
+						-mno-tbm
+						-mno-tgsplit
+						-mno-thumb
+						-mno-tls-direct-seg-refs
+						-mno-tsxldtrk
+						-mno-uintr
+						-mno-unaligned-access
+						-mno-unsafe-fp-atomics
+						-mno-vaes
+						-mno-virt
+						-mno-vpclmulqdq
+						-mno-vsx
+						-mno-vx
+						-mno-vzeroupper
+						-mno-waitpkg
+						-mno-warn-nonportable-cfstrings
+						-mno-wavefrontsize64
+						-mno-wbnoinvd
+						-mno-widekl
+						-mno-x87
+						-mno-xgot
+						-mno-xop
+						-mno-xsave
+						-mno-xsavec
+						-mno-xsaveopt
+						-mno-xsaves
+						-mnocrc
+						-mnontrapping-fptoint
+						-mnop-mcount
+						-mnvj
+						-mnvs
+						-module-dependency-dir
+						-module-file-info
+						-momit-leaf-frame-pointer
+						-moslib
+						-moutline
+						-moutline-atomics
+						-MP
+						-mpacked-stack
+						-mpackets
+						-mpad-max-prefix-size
+						-mpaired-vector-memops
+						-mpascal-strings
+						-mpclmul
+						-mpconfig
+						-mpcrel
+						-mpku
+						-mpopcnt
+						-mpopcntd
+						-mpower10-vector
+						-mpower8-vector
+						-mpower9-vector
+						-mprefer-vector-width
+						-mprefetchwt1
+						-mprefixed
+						-mprfchw
+						-mprivileged
+						-mptwrite
+						-mpure-code
+						-MQ
+						-mqdsp6-compat
+						-mrdpid
+						-mrdrnd
+						-mrdseed
+						-mrecip
+						-mrecord-mcount
+						-mred-zone
+						-mreference-types
+						-mregparm
+						-mrelax
+						-mrelax-all
+						-mrelaxed-simd
+						-mrestrict-it
+						-mretpoline
+						-mretpoline-external-thunk
+						-mrop-protect
+						-mrtd
+						-mrtm
+						-msahf
+						-msave-restore
+						-msecure-plt
+						-mserialize
+						-mseses
+						-msgx
+						-msha
+						-mshstk
+						-msign-ext
+						-msign-return-address
+						-msim
+						-msimd128
+						-msingle-float
+						-msmall-data-limit
+						-msmall-data-threshold
+						-msoft-float
+						-mspe
+						-mspeculative-load-hardening
+						-msse
+						-msse2
+						-msse3
+						-msse4
+						-msse4.1
+						-msse4.2
+						-msse4a
+						-mssse3
+						-mstack-alignment
+						-mstack-arg-probe
+						-mstack-probe-size
+						-mstack-protector-guard
+						-mstack-protector-guard-offset
+						-mstack-protector-guard-reg
+						-mstackrealign
+						-msve-vector-bits
+						-msvr4-struct-return
+						-MT
+						-mtail-call
+						-mtargetos
+						-mtbm
+						-mtgsplit
+						-mthread-model
+						-mthreads
+						-mthumb
+						-mtls-direct-seg-refs
+						-mtls-size
+						-mtp
+						-mtsxldtrk
+						-mtune
+						-mtvos-simulator-version-min
+						-mtvos-version-min
+						-muintr
+						-multi_module
+						-multiply_defined
+						-multiply_defined_unused
+						-munaligned-access
+						-municode
+						-munsafe-fp-atomics
+						-MV
+						-mv5
+						-mv55
+						-mv60
+						-mv62
+						-mv65
+						-mv66
+						-mv67
+						-mv67t
+						-mv68
+						-mvaes
+						-mvirt
+						-mvpclmulqdq
+						-mvsx
+						-mvx
+						-mvzeroupper
+						-mwaitpkg
+						-mwarn-nonportable-cfstrings
+						-mwatchos-simulator-version-min
+						-mwatchos-version-min
+						-mwatchsimulator-version-min
+						-mwavefrontsize64
+						-mwbnoinvd
+						-mwidekl
+						-mwindows
+						-mx32
+						-mx87
+						-mxgot
+						-mxop
+						-mxsave
+						-mxsavec
+						-mxsaveopt
+						-mxsaves
+						-mzvector
+						-no-integrated-cpp
+						-no-pedantic
+						-no-pie
+						-no-pthread
+						-no_dead_strip_inits_and_terms
+						-nobuiltininc
+						-nocudainc
+						-nocudalib
+						-nodefaultlibs
+						-nofixprebinding
+						-nogpuinc
+						-nogpulib
+						-nolibc
+						-nomultidefs
+						-nopie
+						-noprebind
+						-noprofilelib
+						-noseglinkedit
+						-nostartfiles
+						-nostdinc
+						-nostdlib
+						-nostdlibinc
+						-o
+						-O
+						-O1
+						-O2
+						-O3
+						-ObjC
+						-objcmt-atomic-property
+						-objcmt-migrate-all
+						-objcmt-migrate-annotation
+						-objcmt-migrate-designated-init
+						-objcmt-migrate-instancetype
+						-objcmt-migrate-literals
+						-objcmt-migrate-ns-macros
+						-objcmt-migrate-property
+						-objcmt-migrate-property-dot-syntax
+						-objcmt-migrate-protocol-conformance
+						-objcmt-migrate-readonly-property
+						-objcmt-migrate-readwrite-property
+						-objcmt-migrate-subscripting
+						-objcmt-ns-nonatomic-iosonly
+						-objcmt-returns-innerpointer-property
+						-objcmt-white-list-dir-path
+						-objcmt-whitelist-dir-path
+						-object
+						-Ofast
+						-p
+						-P
+						-pagezero_size
+						-pedantic
+						-pedantic-errors
+						-pg
+						-pie
+						-pipe
+						-prebind
+						-prebind_all_twolevel_modules
+						-preload
+						-print-effective-triple
+						-print-file-name
+						-print-ivar-layout
+						-print-libgcc-file-name
+						-print-multi-directory
+						-print-multi-lib
+						-print-multiarch
+						-print-prog-name
+						-print-resource-dir
+						-print-rocm-search-dirs
+						-print-runtime-dir
+						-print-search-dirs
+						-print-supported-cpus
+						-print-target-triple
+						-print-targets
+						-private_bundle
+						-pthread
+						-pthreads
+						-Qn
+						-Qunused-arguments
+						-Qy
+						-R
+						-r
+						-rdynamic
+						-read_only_relocs
+						-relocatable-pch
+						-remap
+						-rewrite-legacy-objc
+						-rewrite-objc
+						-Rpass
+						-Rpass-analysis
+						-Rpass-missed
+						-rpath
+						-rtlib
+						-S
+						-s
+						-save-stats
+						-save-temps
+						-sectalign
+						-sectcreate
+						-sectobjectsymbols
+						-sectorder
+						-seg1addr
+						-seg_addr_table
+						-seg_addr_table_filename
+						-segaddr
+						-segcreate
+						-seglinkedit
+						-segprot
+						-segs_read_
+						-segs_read_only_addr
+						-segs_read_write_addr
+						-serialize-diagnostics
+						-shared
+						-shared-libasan
+						-shared-libgcc
+						-shared-libsan
+						-single_module
+						-specs
+						-static
+						-static-libgcc
+						-static-libgfortran
+						-static-libsan
+						-static-libstdc
+						-static-openmp
+						-static-pie
+						-std
+						-std-default
+						-stdlib
+						-sub_library
+						-sub_umbrella
+						-sycl-std
+						-T
+						-t
+						-target
+						-Tbss
+						-Tdata
+						-time
+						-traditional
+						-traditional-cpp
+						-trigraphs
+						-Ttext
+						-twolevel_namespace
+						-twolevel_namespace_hints
+						-U
+						-u
+						-umbrella
+						-undef
+						-undefined
+						-unexported_symbols_list
+						-unwindlib
+						-v
+						-verify-pch
+						-w
+						-W
+						-Wa
+						-Wdeprecated
+						-weak-l
+						-weak_framework
+						-weak_library
+						-weak_reference_mismatches
+						-Wframe-larger-than
+						-whatsloaded
+						-why_load
+						-whyload
+						-Wl
+						-Wlarge-by-value-copy
+						-Wmax-tokens.
+						-Wno-deprecated
+						-Wno-nonportable-cfstrings
+						-Wnonportable-cfstrings
+						-working-directory
+						-Wp
+						-x
+						-X
+						-Xanalyzer
+						-Xarch_
+						-Xarch_device
+						-Xarch_host
+						-Xassembler
+						-Xclang
+						-Xcuda-fatbinary
+						-Xcuda-ptxas
+						-Xlinker
+						-Xopenmp-target
+						-Xpreprocessor
+						-y
+						-Z
+						-z
+						```
+					</script>
+				</section>
+				<section>
+					<img src="https://github.com/simdjson/simdjson/blob/master/doc/rome.png?raw=true" width="860"></src>
+					Same C++, same set of inputs, same compilers
+					<p>
+						Source: <a href="https://github.com/simdjson/simdjson">simdjson</a>
+					</p>
+				</section>
+				<section>
+					<h2>What happened?</h2>
+
+					Well, that's complicated
+				</section>
+				<section>SIMD (Single Instruction Multiple Data)
+					<pre><code class="cpp" data-trim data-noescape><script type="text/template">
+static uint32_t parse_eight_digits_unrolled(
+		const uint8_t *chars) {
+  // this actually computes *16* values so we are being wasteful.
+  const __m128i ascii0 = _mm_set1_epi8('0');
+  const __m128i mul_1_10 =
+    _mm_setr_epi8(10, 1, 10, 1, 10, 1, 10, 1, 10, 1, 10, 1, 10, 1, 10, 1);
+  const __m128i mul_1_100 =
+  	_mm_setr_epi16(100, 1, 100, 1, 100, 1, 100, 1);
+  const __m128i mul_1_10000 =
+    _mm_setr_epi16(10000, 1, 10000, 1, 10000, 1, 10000, 1);
+  const __m128i input = _mm_sub_epi8(
+    _mm_loadu_si128(reinterpret_cast<const __m128i *>(chars)), ascii0);
+  const __m128i t1 = _mm_maddubs_epi16(input, mul_1_10);
+  const __m128i t2 = _mm_madd_epi16(t1, mul_1_100);
+  const __m128i t3 = _mm_packus_epi32(t2, t2);
+  const __m128i t4 = _mm_madd_epi16(t3, mul_1_10000);
+  return _mm_cvtsi128_si32(
+      t4); // only captures the sum of the first 8 digits, drop the rest
+}
+					</script></code></pre>
+				</section>
+					<section>
+						Compiler options
+					<pre><code class="cpp" data-trim data-noescape data-line-numbers=1-5|5><script type="text/template">
+#define SIMDJSON_TARGET_REGION(T) \
+  _Pragma(STRINGIFY(              \
+      clang attribute push(__attribute__((target(T))), apply_to = function)))
+#define SIMDJSON_TARGET_WESTMERE \
+	SIMDJSON_TARGET_REGION("sse4.2,pclmul")
+					</script></code></pre>
+
+					</section>
+				<section>
+					Hundreds of hours of assembly generation debugging
+					<img src="https://pbs.twimg.com/media/EcaclzVXkAAKLfH?format=jpg&name=4096x4096" style="height: 600px;"></src>
+				</section>
+				<section>
+					Point 1: don't blame compilers for being slow. They will not generate best possible code for you
+				</section>
+				<section>
+					Point 2: There is a chance your code will grow a lot and you won't notice
+				</section>
+				<section><h2>Forgotten story 1: visibility</h2></section>
+				<section data-auto-animate>
+<pre><code class="cpp">// library.h
+void Foo();
+void Bar();
+</code></pre>
+<pre><code class="cpp">// library.cc
+void Foo() { ... }
+void Bar() { ... }
+</code></pre>
+<pre><code data-id="code-animation" class="cpp">// main.cc
+#include "library.h"
+Foo();
+Bar();</code></pre>
+<p data-id="conclusion">\[ \Longrightarrow \textrm{ ?} \]</p>
+<pre data-id="asm-animation"><code class="asm">// compiled.o
+call _Z3Bar
+call _Z3Foo</code></pre>
+			</section>
+			<section data-auto-animate data-separator-vertical>
+				<p class="r-fit-text">
+<pre><code data-id="code-animation" class="cpp">// main.cc
+#include "library.h"
+Foo();
+Bar();</code></pre>
+<p data-id="conclusion">\[ \Longrightarrow \textrm{ No*} \]</p>
+<pre data-id="asm-animation"><code class="asm">// compiled.o
+call _Z3Bar
+call _Z3Foo</code></pre>
+</p>
+			</section>
+			<section>
+				They can use global memory
+
+				<pre><code class="c++">
+								void Foo() {
+									LOG(INFO) << ...
+								}
+								void Bar() {
+									LOG(INFO) << ...
+								}
+				</code></pre>
+			</section>
+				<section>
+					Compilers just do not see it
+				</section>
+				<section>
+					<h3>Solution: write in headers!</h3>
+					<a class="fragment" data-fragment-index="2" style="color:red;"> Well... Please, don't write everything in headers</a>
+					<pre><code class="cpp">// library.h
+// Don't do that often
+inline void Foo() {
+}
+// Don't do that often
+inline void Bar() {
+}</code></pre>
+				</section>
+				<section>
+					Compile times are also important, don't ignore them.
+					<p class="fragment" data-fragment-index="2" style="color:red;">But we lose performance!</p>
+					<p class="fragment" data-fragment-index="3" style="color:green;">Productivity is important also</p>
+				</section>
+				<section>
+					Link time optimizations
+					<ul>
+						<li class="fragment" data-fragment-index="2">LTO sees all program</li>
+						<li class="fragment" data-fragment-index="3">ThinLTO provides summaries of modules (sees all potential optimization parts of the program)</li>
+						<li class="fragment" data-fragment-index="4">-flto, -flto=thin (only in LLVM)</li>
+						<li class="fragment" data-fragment-index="5">0-10% performance, at Google we saw 3-4%</li>
+					</ul>
+				</section>
+				<section>
+					<h2>(Possible) Workflow</h2>
+					<ul>
+						<li class="fragment" data-fragment-index="2">Usual builds without ThinLTO</li>
+						<li class="fragment" data-fragment-index="3">Release builds with ThinLTO</li>
+						<li class="fragment" data-fragment-index="4">Gains and no blow up in compile times</li>
+						<li class="fragment" data-fragment-index="5">Usual LTO may be unscalable</li>
+					</ul>
+				</section>
+				<section>
+					Open Source <a href="https://github.com/ClickHouse/ClickHouse/pull/10585">ClickHouse (400k+ LOC)</a>
+					<img src="https://user-images.githubusercontent.com/18581488/80842304-ebfc5b80-8c09-11ea-87df-63447fc2759e.png">
+					<p class="fragment" data-fragment-index="2">-flto did not finish</p>
+				</section>
+				<section>
+					<h2>Caveats</h2>
+					<p class="fragment" data-fragment-index="2" style="color:red;">You don't test what you really build</p>
+					<p class="fragment" data-fragment-index="3" style="color:yellow;">At Google no problems seen for thousands of targets</p>
+					<p class="fragment" data-fragment-index="4" style="color:green;">Extensive sanitizer usage helps</p>
+					<p class="fragment" data-fragment-index="5" style="color:green;">Integration testing helps</p>
+				</section>
+				<section>
+					Point 3: More visibility to your compiler opens more optimizations
+				</section>
+				<section data-markdown>
+					You probably heard of optimization levels `-O0`, `-O1`, `-O2`, `-O3`, `-Ofast`
+				</section>
+				<section>
+					<h2>What do they exactly mean?</h2>
+					<p>Let's discuss first some high level architectural overview of compilers</p>
+					<img src="https://2.bp.blogspot.com/-uilL1GOdl0E/WrVbVxsAxHI/AAAAAAAAAoU/oDi-ww1rx8I-xlHhmFHtUiLK_FgCUVajQCLcBGAs/s1600/DragonPony.png" style="width: 450px"></src>
+					<img src="pngegg.png" style="width: 350px"></src>
+				</section>
+				<section data-auto-animate>
+					<ul data-id="compiler-list">
+						<li>Front end: parse semantics of C++ into first IR</li>
+						<li>Middle end: optimizations over IR</li>
+						<li>Back end: codegen for the architecture</li>
+					</ul>
+				</section>
+				<section data-auto-animate>
+					<img src="https://egorbo.com/images/llvm-opt/llvm-arch.png" style="width: 700px"></src>
+					<p>Clang+LLVM</p>
+					<img src="https://miro.medium.com/max/700/0*DNQO_vbmLtbTMsrB.JPG" style="width: 600px"></src>
+					<p>GCC</p>
+				</section>
+				<section data-auto-animate>
+					<ul data-id="compiler-list">
+						<li>Middle end: optimizations over IR</li>
+						<ul>
+							<li>Cleanup and canonicalization</li>
+							<li>Simplification and more canonicalization</li>
+							<li>Target-specific optimizations and lowering</li>
+							<img src="https://polly.llvm.org/docs/_images/LLVM-Passes-only.png"></src>
+						</ul>
+					</ul>
+				</section>
+				<section data-markdown>
+					LLVM and GCC:
+					* `-O0` almost no passes
+					* `-O1` includes some passes
+					* `-O2` includes most passes
+					* `-O3` includes all passes
+					* `-Ofast` includes `-O3` + `-ffast-math` + some weird more <a style="color: red">(dangerous!)</a>
+				</section>
+				<section>
+					O3 includes <a href="https://github.com/gcc-mirror/gcc/blob/master/gcc/opts.c#L660">in GCC (clickable)</a>
+					<pre><code lang="c" data-line-numbers="1-15|4-6,8,10,11,13">/* -O3 optimizations.  */
+{ OPT_LEVELS_3_PLUS, OPT_fgcse_after_reload, NULL, 1 },
+{ OPT_LEVELS_3_PLUS, OPT_fipa_cp_clone, NULL, 1 },
+{ OPT_LEVELS_3_PLUS, OPT_floop_interchange, NULL, 1 },
+{ OPT_LEVELS_3_PLUS, OPT_floop_unroll_and_jam, NULL, 1 },
+{ OPT_LEVELS_3_PLUS, OPT_fpeel_loops, NULL, 1 },
+{ OPT_LEVELS_3_PLUS, OPT_fpredictive_commoning, NULL, 1 },
+{ OPT_LEVELS_3_PLUS, OPT_fsplit_loops, NULL, 1 },
+{ OPT_LEVELS_3_PLUS, OPT_fsplit_paths, NULL, 1 },
+{ OPT_LEVELS_3_PLUS, OPT_ftree_loop_distribution, NULL, 1 },
+{ OPT_LEVELS_3_PLUS, OPT_ftree_loop_vectorize, NULL, 1 },
+{ OPT_LEVELS_3_PLUS, OPT_ftree_partial_pre, NULL, 1 },
+{ OPT_LEVELS_3_PLUS, OPT_ftree_slp_vectorize, NULL, 1 },
+{ OPT_LEVELS_3_PLUS, OPT_funswitch_loops, NULL, 1 },
+{ OPT_LEVELS_3_PLUS, OPT_fvect_cost_model_, NULL, VECT_COST_MODEL_DYNAMIC },
+{ OPT_LEVELS_3_PLUS, OPT_fversion_loops_for_strides, NULL, 1 },</code></pre>
+				</section>
+				<section>
+					<pre><code lang="c">/* -ffast-math */
+if (!opts->frontend_set_flag_unsafe_math_optimizations) {
+	opts->x_flag_unsafe_math_optimizations = set;
+	set_unsafe_math_optimizations_flags (opts, set);
+}
+if (!opts->frontend_set_flag_finite_math_only)
+	opts->x_flag_finite_math_only = set;
+if (!opts->frontend_set_flag_errno_math)
+	opts->x_flag_errno_math = !set;</code></pre>
+				</section>
+				<section>
+					Loop vectorization is <a href="https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=2b8453c401b699ed93c085d0413ab4b5030bcdb8">enabled</a> by default in -O2 from GCC12 !
+				</section>
+				<section>
+					<iframe width="2000px" height="400px" src="https://gcc.godbolt.org/e#z:OYLghAFBqd5QCxAYwPYBMCmBRdBLAF1QCcAaPECAMzwBtMA7AQwFtMQByARg9KtQYEAysib0QXACx8BBAKoBnTAAUAHpwAMvAFYTStJg1DIApACYAQuYukl9ZATwDKjdAGFUtAK4sGIABykrgAyeAyYAHI%2BAEaYxCAAzKQADqgKhE4MHt6%2BASlpGQKh4VEssfFJdpgOmUIETMQE2T5%2BgVU1AnUNBMWRMXGJtvWNzbltwz1hfWUDCQCUtqhexMjsHOYJYcjeWADUJgluAG7VRMQH2CYaAIJX12EEu0I%2BEGgMCo8f6CAgJw4kBzcDwu5gAbLtVHN9gB2Kw3XYI3YPXYKHz7BIAEV2GgOcOuiN2/GIu1eAg%2BuyYXiIYKRuxAEKhJlhdwJBNRLH2lgOWLwuJZiKZGP5COImAIywYKJ8fJugruHAWtE4AFZeH4OFpSKhOG5rNYUUsVphOQkeKQCJoFQsANYgMzQgB0kjMkg0XAAnMr3QloVx/BoNIElRxJGrLVrOLwFCANObLQs4LAkGgWMk6HFyJQU2n6PFgFwuGY%2BHQCHFoxBouHomEGgBPThmlNsQQAeQYtHrGt4WBYhmA4i7pHwopqJ2jg8wqmqVLWZoemGDmtoeGixDrHiw4YIxDwLAbCr4BmACgAanhMAB3FvJRj7mSCERidhSe/yJRqcO6IsGIwoPWWfQV2jSAFlQZJHDJTgAFoWzMKMF1OTIXAYdxPBaO0khCKZSnKEB3XydIIKyNDcjMJJUkIzJehwgZ8PaIiuhGEi/DI2wEI6BhGMmEp%2BniOiJlGFjKgmajeLwhYFENVY9G3TBZwPYNVVIdVNW1DhVH8UEoNBSRdmAZBkF2AsHTMEldS5ADdlwQgSBNLhSF2DxU3TYkNjMOZeAtLs5gWBBMCYLB4ggG1EgSEzQQSd13S4N1PUkL17ODUNSD3GLYxU3g1KjGM4280hE0QFBUGc3NM1JEqBnzQti1oUtiHLStB2rZhiE7RtiubAg2w7cMez7AdNWHRCx3DSdp1LO950XXhl1XdcMDWTVt13fcFioI9T3PK8b3VM1%2BAfURxBffa3xUdRB10JIf2Mf8bFm4Dgq1cDMnHGCEng%2BwiOQ1Ccj8eysJ4mZ4nsijCmI369FBojRKBvR6NqATmLh9iGJE7CxPsj5ukEuG0cB3CuAkqTn3NUV5MVFUw0HNSNK0nS9IMoyuBMszboc6yzjshynJzOITXmTz418/zAsoELIodU0PX8b1NOhBJQQ0fCkt4VKA2U8MstsHKvK0Hz9E4OCNepyNcr1hYTnqpDJCAA%3D%3D"></iframe>
+					<a href="https://gcc.godbolt.org/z/ofKqnbKWY">https://gcc.godbolt.org/z/ofKqnbKWY</a>
+				</section>
+				<section>
+					LLVM in O3 includes
+<pre><code lang="cpp" data-line-numbers=1-15>
+if (Level == OptimizationLevel::O3)
+  FPM.addPass(AggressiveInstCombinePass());
+// FIXME: It isn't at all clear why this should
+// be limited to O3.
+if (Level == OptimizationLevel::O3)
+  MainCGPipeline.addPass(ArgumentPromotionPass());
+if (Level == OptimizationLevel::O3)
+  EarlyFPM.addPass(CallSiteSplittingPass());
+
+LPM.addPass(SimpleLoopUnswitchPass(/* NonTrivial */ Level ==
+                                   OptimizationLevel::O3));</code></pre>
+				</section>
+				<section>
+					<iframe width="2000px" height="400px" src="https://gcc.godbolt.org/e#z:OYLghAFBqd5QCxAYwPYBMCmBRdBLAF1QCcAaPECAMzwBtMA7AQwFtMQByARg9KtQYEAysib0QXACx8BBAKoBnTAAUAHpwAMvAFYTStJg1DIApACYAQuYukl9ZATwDKjdAGFUtAK4sGe1wAyeAyYAHI%2BAEaYxCAAHKQADqgKhE4MHt6%2BekkpjgJBIeEsUTHxdpgOaUIETMQEGT5%2BXLaY9nkM1bUEBWGR0XG2NXUNWc0KQ93BvcX9sQCUtqhexMjsHMEEANRJCWheghD7KcAh6Jsb53ObJgDsVhoAgpvn1wDMACIvALSbUHhv2BMr2wmy4V3MADZNhpVABWeEI%2BFzIH3J4vIGfCD/SHQ1SvfEE/HgywmR7Pcnkv4AoEgszEqEwwmE5GvVHPbEfX5Y66WX4cwHAzaSOb03EaABiEql4pZbM2xEwBGWDD5mwAVGKuBotTrwcCaZszJIUaSHrd3qaOAtaJxYbw/BwtKRUJw3NZrJsFEsVpgea8eKQCJorQsANYgf0AOkk2skAE5YhozBpYjcbgmbvpOJJ7cHnZxeAoQBpA8GFnBYEg0CwEnRouRKNXa/QYsgDEYAPoEYj7UN8OgEaJFiARPMRYK1ACenAD1bYggA8gxaNPHbwsCxDMBxGvSPgFZUAG6YIu7zCqCpeQcz3gbVp52h4CLEKceLB57t4Fg3hZUAzABQADU8EwAB3BcEkYG8ZEEEQxHYKQYPkJQ1DzXRXn0LcUHdSx9CfItIAWVAEnaU8vgXV5Ni%2BGtiOQQRC1aCp2hcBh3E8Rp/FYnoihKbJklSAQRiaRJ%2BPabi%2BhiMZGMqAROmGdjRhaNoqgmcSZkkwYuiEvRxi6NTeLBRZllWPRu0wNYeGtW1c13F0OFUWIIS%2BCFJE2Nst1%2BbteyuCA3RJXDNlwQgSD9ZpNg8Gs62IP1XjmXggzXEVSAQTAmCwGIIDDCMuEjWEE1hG5YnhMxXliOM0yzDgc1Ib8tRLB0nTswti1LRLSArRAUFQSKWwbCAmyilB22ALsewYPsaFoQdiGHUdd3HZhiFXWduvnAglxXPMNy3HcnX3Ji8GPU8nXPS9r24W9BHvXdH2fV8MDWJ1P2/C7f3/ICQPAyCHQDfhYNEcREL%2B5CVHUXddGaYbsP8mxboIzLnRItIyIXMwqJo3Z6KUg7nAgVxtOaQIph4/pmhyAT0gU4TybE4mJJ06T2jk%2BoqYZ5TZNUun1J0iYCc0up9NJhYvWMhDAwVCyrUqu1SAa3g7IcpyXLc4bPLG0MfL8qwAqCohovMf1SHC7rm2iUK4tarQkvDV4IUjOMHbjErJDMCEbleMwjUq6q5fzDhmpLBKrasjgzBsxqC0tkNSGPGa0hASQgA%3D"></iframe>
+					<a href="https://gcc.godbolt.org/z/redozT7aK">https://gcc.godbolt.org/z/redozT7aK</a>
+				</section>
+				<section data-markdown>
+					Point 4: Use `-O0 -g` for debugging purposes, use `-O3` for optimization purposes
+				</section>
+				<section data-auto-animate>
+					<h4 style="color: red">Problem: -O0 is too slow for debugging!</h4>
+					<ul>
+					  <li class="fragment" data-fragment-index="2">-O1</li>
+					  <li class="fragment" data-fragment-index="3">-fno-omit-frame-pointer</li>
+					  <li class="fragment" data-fragment-index="4">-fno-optimize-sibling-calls</li>
+					</ul>
+				</section>
+				<section data-auto-animate>
+					<h4 style="color: red">Problem: -O0 is too slow for debugging!</h4>
+					<ul>
+					  <li>-O1</li>
+					  <ul>
+					  	<li style="color: grey">Some optimizations</li>
+					  </ul>
+					  <li>-fno-omit-frame-pointer</li>
+					  <ul>
+					  	<li style="color: grey">Better stacktraces (saves the base pointer)</li>
+					  </ul>
+					  <li>-fno-optimize-sibling-calls</li>
+					  <ul>
+					  	<li  style="color: grey">Removes tail call elimination (debuggers are less confused)</li>
+					  </ul>
+					</ul>
+					<p>
+					Source: <a href="https://clang.llvm.org/docs/AddressSanitizer.html#usage">LLVM better sanitizer debugging</a></p>
+				</section>
+				<section>
+					<p style="color: yellow">-Og. Optimize debugging experience</p>
+
+				  <p class="fragment" data-fragment-index="3">Works nicely only in GCC</p>
+				  <p class="fragment" data-fragment-index="4">Source: <a class="fragment" data-fragment-index="4" href="https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html">GCC optimize Options</a></p>
+				</section>
+				<section>
+					<h3>Request from a friend:</h3>
+						<blockquote>
+Hey, buddy! We have likely a compiler bug.
+We move function out of anonymous namespace and it works.
+Also works in debug mode.
+</blockquote>
+				</section>
+				<section>
+					<h3>My response:</h3>
+<blockquote>
+	No problem, you can bisect optimizations <a href="https://llvm.org/docs/OptBisect.html">https://llvm.org/docs/OptBisect.html</a>
+</blockquote>
+				</section>
+				<section>
+					<p>-mllvm -opt-bisect-limit=N</p>
+
+					<a style="color: orange;" class="fragment" data-fragment-index="2">I don't know of any infra for this in GCC</a>
+				</section>
+				<section>
+						<h3>Friend:</h3>
+						<blockquote>
+							BISECT: running pass (35481) Two-Address instruction pass on function (_ZN3NYT7NDetail10TBindStateILb1EZNS0_11ApplyHelperIN12_GLOBAL__N_111TFirstClassEiFS4_RKNS_8TErrorOrIiEEEEENS_7TFutureIT_EENS_11TFutureBaseIT0_EENS_9TCallbackIT1_EEEUlS8_E_NS_4NMpl9TSequenceIJEEEJEE3RunIJS8_EEEDaPNS0_14TBindStateBaseEDpOT_)
+						</blockquote>
+				</section>
+				<section>
+					<h3>It really was a bug 😳</h3>
+					<img src="optbug.png" width="500px"></src>
+					<p><a href="https://github.com/llvm/llvm-project/commit/60433c63acb71935111304d71e41b7ee982398f8">Source</a></p>
+				</section>
+				<section>
+					<h3>Request from a friend:</h3>
+<blockquote>
+	I change < to != and get +30% loop performance!
+</blockquote>
+					<img src="loop_thing.png" width="800px"></src>
+				</section>
+				<section>
+					<p>-Rpass-missed=loop-vectorize</p>
+					<p>-Rpass=loop-vectorize</p>
+					<p>-Rpass-analysis=loop-vectorize</p>
+
+					<a class="fragment" data-fragment-index="2" href="https://llvm.org/docs/Vectorizers.html">LLVM Vectorizing debug https://llvm.org/docs/Vectorizers.html</a>
+				</section>
+				<section>
+					<pre><code class="cpp">
+// example.cpp:44:9: remark: loop not vectorized:
+// could not determine number of loop iterations
+// [-Rpass-analysis=loop-vectorize]
+for (; it < span_end; ++it)
+^
+					</code></pre>
+				</section>
+				<section>
+					<pre><code class="c++" data-trim data-noescape><script type="text/template">
+BOOST_ITERATOR_FACADE_RELATION(==, return, equal)
+BOOST_ITERATOR_FACADE_RELATION(!=, return !, equal)
+
+BOOST_ITERATOR_FACADE_RANDOM_ACCESS_RELATION(<, return 0 >, distance_from)
+BOOST_ITERATOR_FACADE_RANDOM_ACCESS_RELATION(>, return 0 <, distance_from)
+BOOST_ITERATOR_FACADE_RANDOM_ACCESS_RELATION(<=, return 0 >=, distance_from)
+BOOST_ITERATOR_FACADE_RANDOM_ACCESS_RELATION(>=, return 0 <=, distance_from)
+					</script></code></pre>
+				</section>
+				<section>
+					Macro
+					<pre><code class="cpp" data-trim data-noescape><script type="text/template">
+#define BOOST_ITERATOR_FACADE_RANDOM_ACCESS_RELATION
+/*...*/
+{                                                                             \                                                                \
+      return_prefix iterator_core_access::base_op(                              \
+          *static_cast<Derived1 const*>(&lhs)                                   \
+        , *static_cast<Derived2 const*>(&rhs)                                   \
+        , BOOST_ITERATOR_CONVERTIBLE(Derived2,Derived1)                         \
+      );                                                                        \
+  }
+					</script></code></pre>
+				</section>
+				<section>
+					<img src="boost_delete.png" width="700px"></src>
+					<a href="https://github.com/ClickHouse/ClickHouse/pull/9498">https://github.com/ClickHouse/ClickHouse/pull/9498</a>
+				</section>
+				<section>
+					<h2>Forgotten story 2: Microarchitecture</h2>
+				</section>
+				<section>
+					<ul>
+						<li>Hardware evolves</li>
+						<li>New instruction sets are added</li>
+						<li>Caches and cachelines grow</li>
+					</ul>
+					<img src="https://software.intel.com/content/dam/develop/external/us/en/images/37207-183287.gif"></src>
+				</section>
+				<section>
+					<h2>Note: it depends on your hardware</h2>
+				</section>
+				<section data-auto-animate>
+					<h2>x86. Westmere era (2010)</h2>
+					<ul class="fragment" data-fragment-index="2">
+						<li>-msse2, -msse3, -mssse3, -msse4.1, -msse4.2</li>
+						<li>-mpclmul</li>
+						<li>-maes</li>
+						<li>-mcx16</li>
+						<li>-mpopcnt</li>
+					</ul>
+				</section>
+				<section data-auto-animate>
+					<h2>x86. Westmere era (2010)</h2>
+					<ul>
+						<li>-msse2, -msse3, -mssse3, -msse4.1, -msse4.2</li>
+					  <ul>
+					  	<li style="color: grey">SSE instruction sets (16 byte registers)</li>
+					  </ul>
+						<li>-mpclmul</li>
+					  <ul>
+					  	<li style="color: grey">Carry less multiplication (benefitial for CRC and Erasure codes)</li>
+					  </ul>
+						<li>-maes</li>
+					  <ul>
+					  	<li style="color: grey">Advanced Encryption Set</li>
+					  </ul>
+						<li>-mcx16</li>
+					  <ul>
+					  	<li style="color: grey">Lock free 16 byte atomics</li>
+					  </ul>
+						<li>-mpopcnt</li>
+					  <ul>
+					  	<li style="color: grey">Popcount instruction</li>
+					  </ul>
+					</ul>
+				</section>
+				<section data-auto-animate>
+					<h2>x86. Haswell era (2013)</h2>
+					<ul>
+						<li>-mavx, -mavx2</li>
+						<li>-mbmi2</li>
+						<li>-mfma</li>
+					</ul>
+				</section>
+				<section data-auto-animate>
+					<h2>x86. Haswell era (2013)</h2>
+					<ul>
+						<li>-mavx, -mavx2</li>
+						<ul>
+					  	<li style="color: grey">Wider 32 byte registers</li>
+					  </ul>
+						<li>-mbmi2</li>
+						<ul>
+					  	<li style="color: grey">Bit manipulation</li>
+					  </ul>
+						<li>-mfma</li>
+						<ul>
+					  	<li style="color: grey">Multiply-addition, a += b * c</li>
+					  </ul>
+					</ul>
+				</section>
+				<section>
+					<h2>x86. Why not just AVX/AVX2/AVX512 by default?</h2>
+					<ul>
+						<li>It depends on your hardware and workload</li>
+						<li>Share AVX with non AVX -> CPU downclocking</li>
+						<li>Heavy AVX (floating point) -> CPU downclocking</li>
+						<ul>
+					  	<li style="color: red">All before including Skylake</li>
+					  	<li style="color: green">From Ice Lake it becomes better</li>
+					  </ul>
+					</ul>
+				</section>
+				<section>
+					<a style="color: yellow">⚠️ Next slide is absolutely subjective and comes from my biased experience</a>
+				</section>
+				<section data-background-color="rgb(255, 255, 255)">
+					<!-- <h2>WARNING: My experience: I might be wrong!</h2> -->
+					<img src="architecture_diagram.png" width="900px"></src>
+				</section>
+				<section data-markdown>
+					Point 5: Compilers assume really old hardware (e.g. core2 for x86, 2006), use better options
+				</section>
+				<section data-markdown style="color: red;">
+					Point 6: `-march=native` is extremely dangerous because of illegal instructions and non-homogeneous hardware
+				</section>
+				<section>
+					Ok, I don't use any SIMD, why would I want that?
+				</section>
+				<section>
+					Third party libraries may require that
+					<div class="r-stack">
+						<img class="fragment fade-in-then-out" src="simdjson.png"></src>
+						<img class="fragment fade-in-then-out" src="hyperscan.png"></src>
+						<img class="fragment fade-in-then-out" src="base64.png"></src>
+						<img class="fragment fade-in-then-out" src="zstd.png"></src>
+						<img class="fragment fade-in-then-out" src="snappy.png"></src>
+						<img class="fragment fade-in-then-out" src="fastops.png"></src>
+					</div>
+					<a href="https://github.com/simdjson/simdjson/blob/95b4870e20be5f97d9dcf63b23b1c6f520c366c1/doc/implementation-selection.md">SIMDJSON</a>, <a href="https://github.com/intel/hyperscan/blob/64a995bf445d86b74eb0f375624ffc85682eadfe/doc/dev-reference/getting_started.rst">Hyperscan</a>, <a href="https://github.com/powturbo/Turbo-Base64">Turbo-Base64</a>, <a href="https://github.com/facebook/zstd/blob/d8d6e48a0a85726594322e88b3d258f22fefaae1/lib/README.md">ZSTD</a>, <a href="https://github.com/google/snappy/blob/master/snappy.cc">Snappy</a>, <a href="https://github.com/yandex/fastops">Yandex FastOps</a>, <a href="https://github.com/openssl/openssl/blob/38fc02a7084438e384e152effa84d4bf085783c9/crypto/aes/asm/vpaes-x86_64.pl">OpenSSL</a>
+				</section>
+				<section>
+					<h2>Forgotten story 3: Function inlining</h2>
+				</section>
+				<section>
+					Generally inlining increases performance (see ThinLTO)
+				</section>
+				<section>
+					Function inlining is a <b>cost based model</b>: computes value and decides on a threshold
+					<pre><code class="cpp">const int OptSizeThreshold = 50;
+const int OptMinSizeThreshold = 5;
+const int OptAggressiveThreshold = 250;
+const int InstrCost = 5;
+const int IndirectCallThreshold = 100;
+const int LoopPenalty = 25;
+const int LastCallToStaticBonus = 15000;
+const int ColdccPenalty = 2000;
+const unsigned TotalAllocaSizeRecursiveCaller = 1024;
+const uint64_t MaxSimplifiedDynamicAllocaToInline = 65536;</code></pre>
+				</section>
+				<section>
+					You cannot inline everything and sometimes inlining is bad (e.g. for instruction cache)
+				</section>
+				<section data-markdown>
+					`-mllvm -inline-threshold=N`
+
+					Default is 225
+				</section>
+				<section>
+					<ul>
+						<li style="color: red" class="fragment" data-fragment-index=0>Inlining increases your build size</li>
+						<li style="color: red" class="fragment" data-fragment-index=1>And compile time</li>
+					</ul>
+						<img class="fragment" data-fragment-index=2 src="inlining.png"></src>
+				</section>
+				<section>
+<iframe width="1000px" height="700px" src="https://gcc.godbolt.org/e#z:OYLghAFBqd5QCxAYwPYBMCmBRdBLAF1QCcAaPECAMzwBtMA7AQwFtMQByARg9KtQYEAysib0QXACx8BBAKoBnTAAUAHpwAMvAFYTStJg1DIApACYAQuYukl9ZATwDKjdAGFUtAK4sGEgMykrgAyeAyYAHI%2BAEaYxBJmpAAOqAqETgwe3r4ByanpAqHhUSyx8VyJdpgOGUIETMQEWT5%2BXIFVNQJ1DQRFkTFxCbb1jc05bcM9fSVlCQCUtqhexMjsHGEEANRUEHMm/lYaAIImx2G0YZibG5vAAPrnl7ubJgDsh0ebX5vEmATLDG2z2sQLmL0soPBFkhIJ2YNhwIhcKhMKRiOhyIR8LRewOpxOrwAIvj8Td7gwBA8GBdwsD3vjvj8/gDURj0ayOZicSiuWzsXyeezeaD9h83sTjqTBJsWEwwnSPoz7o9abjFd9yZSVZhdqKSUSOAtaJwAKy8PwcLSkVCcNzWEEKJYrK7mfw8UgETSGhYAaxAJpNADoAJxmABsYZN/hNYeDGgAHMHXoljRxJOavdbOLwFCANB6vQs4LAkGgWEk6HFyJQyxX6PFkAYjHcCMQvAwfXw6AQ4rmINFM9Ewg0AJ6cd1ltiCADy1LHlt4WFlRnEC9I%2BF%2BNQAbphc2vMKpql4e%2BPeBtMKmrRdosRRx4sJnW3gWKeFlQDMAFAA1PCYADu05JIwp4yIIIhiOwUigfIShqJmuiBE2xj2pY%2Bh4NEuaQAsqBJI4Ah7gAtNO/g5he1R4X4ECuGMrRBAw6DTAM5R5GkFE0XoKSsRkjGlIMXC2GRnQMN0oyeC0egdBRIm9JcMx8ZMonZLRCgjDJxRMRICyOssqx6K2mBrDwRqmhma42hwqjxmGBFhpImyNoYwCbBArbtj6YIQHaljWKQmy4IQJDgm6vkeOWlbEEF/hzLwnoLnMCwIJgTBYPEuykH6kiSIGGivP4/iSLZ/gaMGXAaGY8b6Jw6akC%2BpX5haVrmTmeYFnFxkcGYpmNdmrVaPFpA7sQaTOJIQA%3D"></iframe>
+				</section>
+				<section>
+<a style="color: orange"> inline</a> keyword matters! (hehe)
+<a style="color: green" class="fragment">__attribute__((always_inline))</a>
+				</section>
+				<section data-markdown>
+Idea: run with `-mllvm -inline-threshold=1000`, compare benchmarks, set always_inline attributes to a dozens of calls
+				</section>
+				<section>
+Good problem to have: <a style="color: yellow;">I have an absolutely unrelated commit but benchmarks became worse</a>
+				</section>
+				<section>
+Answer: check out for function/loop alignment
+				</section>
+				<section>
+					Caution: awful code!
+					<pre><code class="cpp"><script type="text/template">const int LOOP_BOUND = 200000000;
+
+__attribute__((noinline))
+static int add(const int& x, const int& y) {
+    return x + y;
+}
+
+__attribute__((noinline))
+static int work(int xval, int yval) {
+    int sum(0);
+    for (int i=0; i<LOOP_BOUND; ++i) {
+        int x(xval+sum);
+        int y(yval+sum);
+        int z = add(x, y);
+        sum += z;
+    }
+    return sum;
+}
+
+int main(int , char* argv[]) {
+    int result = work(*argv[1], *argv[2]);
+    return result;
+}</script></code></pre>
+				</section>
+				<section>
+					Stackoverflow: <a href="https://stackoverflow.com/questions/19470873/why-does-gcc-generate-15-20-faster-code-if-i-optimize-for-size-instead-of-speed">Why does GCC generate 15-20% faster code if I optimize for size instead of speed?</a>
+				</section>
+				<section>
+					It was a jump over 32 byte boundary
+					<p>Bad version:</p>
+<pre><code>00000000004004fd <_ZL3addRKiS0_.isra.0>:
+  4004fd:       8d 04 37                lea    eax,[rdi+rsi*1]
+  400500:       c3
+</code></pre>
+				</section>
+				<section>
+					Good version:
+<pre><code>00000000004004fa <_ZL3addRKiS0_.isra.0>:
+  4004fa:       8d 04 37                lea    eax,[rdi+rsi*1]
+  4004fd:       c3                      ret
+
+[...]
+
+  40051a:       e8 db ff ff ff          call   4004fa <_ZL3addRKiS0_.isra.0>
+</code></pre>
+				</section>
+				<section>
+Another problem: <a href="https://www.intel.com/content/dam/support/us/en/documents/processors/mitigations-jump-conditional-code-erratum.pdf">Jump Conditional Code Erratum</a>
+<img src="erratum.jpg"></src>
+				</section>
+				<section data-markdown>
+					* `-mbranches-within-32B-boundaries`
+					* `-falign-functions=32`
+				</section>
+				<section>
+					They highly stabilized benchmarks, for example, at Google and in ClickHouse
+				</section>
+				<section>
+					<h2>Standard library</h2>
+				</section>
+				<section>
+					Likely compilers come with std
+				</section>
+				<section>
+					<p>Main differences:</p>
+					<ul>
+						<li>Small string optimization size</li>
+						<li>Vector/string resizing policy</li>
+						<li>Additional options</li>
+					</ul>
+				</section>
+				<section>
+<pre><code class="c">#if defined(_LIBCPP_ABI_UNSTABLE) || _LIBCPP_ABI_VERSION >= 2
+// Re-worked external template instantiations for std::string with a focus on
+// performance and fast-path inlining.
+#define _LIBCPP_ABI_STRING_OPTIMIZED_EXTERNAL_INSTANTIATION
+// Enable clang::trivial_abi on std::unique_ptr.
+#define _LIBCPP_ABI_ENABLE_UNIQUE_PTR_TRIVIAL_ABI
+// Enable clang::trivial_abi on std::shared_ptr and std::weak_ptr
+#define _LIBCPP_ABI_ENABLE_SHARED_PTR_TRIVIAL_ABI</code></pre>
+				</section>
+				<section>
+					<iframe width="1600px" height="800px" src="https://gcc.godbolt.org/e#z:OYLghAFBqd5QCxAYwPYBMCmBRdBLAF1QCcAaPECAMzwBtMA7AQwFtMQByARg9KtQYEAysib0QXACx8BBAKoBnTAAUAHpwAMvAFYTStJg1DIApACYAQuYukl9ZATwDKjdAGFUtAK4sGIM1ykrgAyeAyYAHI%2BAEaYxCAAbKQADqgKhE4MHt6%2B/oGp6Y4CoeFRLLHxSXaYDplCBEzEBNk%2BfgG2mPZFDPWNBCWRMXGJtg1NLbntCmP9YYPlwwkAlLaoXsTI7BzmAMxhyN5YANQmO25sLCQAnqfYJhoAgvcPYQRHVBDT6CAgXgx4AEcvJgAPrJAjEU5uV63I7JJanKyPZ6vI7AT4Eb6/f5A0HgyFnGE7bBwpYnADsSIeRxp7wxWMuADdMBB4QidlSTOSACIcFa0TgAVl4fg4WlIqE4bms1iOCjWG0wJzMOx4pAImj5KwA1iAduSAHQATi45MkAA5BWYElazIKjTt9JxJCLNRLOLwFCANOrNSs4LAYIgUKgWMk6HFyJQ0GGI/EDoZgCCIX9tXw6AQ4l6INE3dEwo0rpw1TG2IIAPIMWhFsW8LAsRPiWukfDEGqOZle5uYVQ1LyZ4u8V6dN20PDRYiFjxYN0QvAsQcrKgGYAKABqeEwAHdy8lGIOZIIRGJ2FJD/IlGo3bpHQYjCgZZZ9OOvZAVqhwZkuwBacs7I7flQDCoN%2BPabJ%2BAgKABXxjtEpzcrBpiWNYnqdO2mQuAw7ieK0EhniEcxlBUeEpGkGQCBMfhcGeBTkQwAxEcM1EdF0dQzJReHSNUtQCL0TQMUM8TMdMfQcdRXEzAJCxCVwKzyusmx6BCmBbDw/JCq6zaShwqjmgk34JJIRwJkYRwQCmDDamSEDSshT5HLghAkMqqqkEcHixvQxAuTsSy8BqtZLCsCCYEwWDxBAOogFaBr6g6DpSIKCQaGeAocC6pALoKPqiuK2met6vqBaQAbBjG4ZeVGEDlXGKB3kmFlpjQtCZsQ2a5s2%2BbMMQNYlqGZYEJW1ZuvWjZbOKrboZ2bo9n2A7cEOggjs2sGTj107jf5xDzoufAruum47nuopqvwR6iOIZ5nReKjqM2uiBPVD52TYsGvpFEoQQwP5/gBQEgWBmBfVB34weO8GIY%2BFgAdyILBAAkhYbjKMoIIPBY8MgtgETo8E2AgnIETwwAinI%2BPKAAKgASiC1Pw2u8MPMEaMY6hrHOBArgceS5JBFhUnEY6tHdNzvPC5kAvDI63HdHxzQ4bkPMsehvGSYRgl6qMokK34Ssifx6vSXqckKopgTKapfJOhwwqkLlvDabp%2BmGcZ9VmY11m2VY9mOUQ3m7IE7mhhVcQubJ/l%2BsFoXhZQ6npbwWU5W6%2BW2IVAVaEFpC6gkZgGho5p2lI5I7JIPOSBoNrWzsml5R6RUZ3HZg1w7dfp1qpDMm1GGSEAA%3D%3D"></iframe>
+				</section>
+				<section>
+					2-2.5% build size win at Google (it requires building everything from source)
+				</section>
+				<section>
+					C++20 char8_t is one of the best features for performance. It allows to specify non overlapping pointers
+					<img src="char8t.png"></src>
+					<a href="https://github.com/ClickHouse/ClickHouse/pull/9304">Source: ClickHouse</a>
+				</section>
+				<section>
+					<blockquote>This means that, unlike unsigned char, it cannot be used for the underlying storage of objects of another type, nor can it be used to examine the underlying representation of objects of other types; in other words, it cannot be used to alias other types</blockquote>
+					<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0482r6.html">Source</a>
+				</section>
+				<section>
+					memmove/memcpy
+					<pre><code class="cpp"><script type="text/template">template <class _Tp, class _Up>
+typename enable_if
+<
+    is_same<typename remove_const<_Tp>::type, _Up>::value &&
+    is_trivially_copy_assignable<_Up>::value,
+    _Up*
+>::type
+__copy(_Tp* __first, _Tp* __last, _Up* __result)
+{
+    const size_t __n = static_cast<size_t>(__last - __first);
+    if (__n > 0)
+        _VSTD::memmove(__result, __first, __n * sizeof(_Up));
+    return __result + __n;
+}</script></code></pre>
+				</section>
+				<section>
+					ClickHouse is column oriented and marking columns to be char8_t is desired
+				</section>
+				<section>
+				<pre><code><script type="text/template">
+       │43b:┌─ mov    0x10(%r13),%rdx                                                                                                                                                                                                   ▒
+  6.06 │    │  movzbl (%rdx,%rax,1),%ecx                                                                                                                                                                                                ▒
+  4.55 │    │  mov    0x10(%rbp),%rdx      !!!                                                                                                                                                                                             ▒
+ 21.21 │    │  mov    %cl,(%rdx,%rax,1)                                                                                                                                                                                                 ▒
+  1.52 │    │  add    $0x1,%rax                                                                                                                                                                                                         ▒
+       │    │  cmp    %rax,%r14                                                                                                                                                                                                         ▒
+  1.52 │    │  je     a80e2b0 <bool DB::FunctionIf::executeTyped<unsigned char, unsigned char>(DB::ColumnVector<unsigned char> const*, 2b0                                                                                              ▒
+  3.03 │    │  mov    0x10(%r12),%rdx      !!!                                                                                                                                                                                             ▒
+ 10.61 │    │  cmpb   $0x0,(%rdx,%rax,1)                                                                                                                                                                                                ▒
+  9.09 │    └──je     a80e43b <bool DB::FunctionIf::executeTyped<unsigned char, unsigned char>(DB::ColumnVector<unsigned char> const*, 43b                                                                                              ▒
+</script></code></pre>
+</section>
+<section>
+<pre><code><script type="text/template">
+
+       │456:┌─ mov    0x10(%r12),%rsi                                                                                                                                                                                                   ▒
+ 38.46 │    │  movzbl (%rsi,%rax,1),%esi                                                                                                                                                                                                ▒
+ 21.15 │    │  mov    %sil,(%rcx,%rax,1)                                                                                                                                                                                                ▒
+       │    │  add    $0x1,%rax                                                                                                                                                                                                         ▒
+       │    │  cmp    %rax,%r14                                                                                                                                                                                                         ▒
+  1.92 │    │  je     197                                                                                                                                                                                                               ▒
+ 36.54 │    │  cmpb   $0x0,(%rdx,%rax,1)                                                                                                                                                                                                ▒
+       │    └──je     456                                                                                                                                                                                                               ▒
+				</script></code></pre>
+			</section>
+			<section>
+				<p>Summary:</p>
+				<ul>
+					<li>Visibility</li>
+					<li>Optimization Passes</li>
+					<li>Microarchitecture</li>
+					<li>Standard Library</li>
+					<li>Inlining</li>
+				</ul>
+			</section>
+			<section data-auto-animate>
+				<p>Many more</p>
+				<ul>
+					<li>Profile guided optimization</li>
+					<li>Post link optimization (BOLT/Propeller)</li>
+					<li>New pass manager (default in clang-13)</li>
+					<li>Tooling: clang-tidy, AST matchers</li>
+				</ul>
+			</section>
+			<section data-auto-animate>
+				<p>Many more</p>
+				<ul>
+					<li>Profile guided optimization</li>
+					<ul><li style="color: grey">Collect profiles and have better loop/inline decisions: <a href="https://llvm.org/docs/HowToBuildWithPGO.html">LLVM PGO</a></li></ul>
+					<li>Post link optimization (BOLT/Propeller)</li>
+					<ul><li style="color: grey">Move blocks together without recompilation</li></ul>
+					<li>New pass manager (default in clang-13)</li>
+					<ul><li style="color: grey">Better pass manager strategy (mostly inlining)</li></ul>
+					<li>Tooling: clang-tidy, AST matchers</li>
+					<ul><li style="color: grey">Static analysis</li></ul>
+				</ul>
+			</section>
+				<section>
+					<h2>Results</h2>
+				</section>
+				<section>
+					<p>Mozilla Firefox <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Firefox_logo%2C_2019.svg/1024px-Firefox_logo%2C_2019.svg.png" width="30px"></src></p>
+					<ul>
+						<li>Move from GCC/MSVC to Clang</li>
+						<li>-flto, PGO</li>
+						<li>-fexperimental-new-pass-manager (by default in clang-13)</li>
+					</ul>
+					<h3 class="fragment" data-fragment-index="2" style="color: yellow">5-7% win on Talos tests</h3>
+					<p><a href="https://glandium.org/blog/?p=3888">Mozilla Blog</a></p>
+					<p><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1619461">Pass Manager Commit</a></p>
+				</section>
+				<section>
+					<blockquote>
+						Update: As there’s been some interest on reddit and HN, and I failed to mention it originally, it’s worth noting that comparing GCC+PGO vs. clang+LTO or GCC+PGO vs. clang+PGO was a win for clang overall in both cases, although GCC was winning on a few benchmarks. If I remember correctly, clang without PGO/LTO was also winning against GCC without PGO.
+					</blockquote>
+				</section>
+				<section>
+					<p>Stockfish <img src="https://www.chessprogramming.org/images/0/09/Stockfish-logo.png" width="50px"></src></p>
+					<ul>
+						<li>-flto</li>
+						<li>-fexperimental-new-pass-manager (by default in clang-13)</li>
+						<li>Options up to AVX512</li>
+						<li>Parity performance with GCC</li>
+					</ul>
+					<h3 class="fragment" data-fragment-index="2" style="color: yellow">3% win or around 20 Elo points</h3>
+					<p><a href="https://github.com/official-stockfish/Stockfish/issues/3341">Issue with all discussion in Stockfish</a></p>
+				</section>
+				<section>
+					<p>Yandex Search Engine <img src="https://cdn.icon-icons.com/icons2/2699/PNG/512/yandex_logo_icon_170668.png" width="30px"></src> </p>
+					<ul>
+						<li>-msse4.2</li>
+						<li>-flto=thin</li>
+						<li>AVX/FMA dynamic dispatch on hot paths</li>
+						<li>libc++</li>
+						<li>Moved from GCC to LLVM</li>
+						<li>Inline threshold 1000</li>
+					</ul>
+					<h3 class="fragment" data-fragment-index="2" style="color: yellow">7% better average query response time</h3>
+				</section>
+				<section>
+					<p>One trading company</p>
+					<ul>
+						<li>-flto=thin</li>
+						<li>-march=haswell</li>
+						<li>Inline threshold 1000</li>
+					</ul>
+					<h3 class="fragment" data-fragment-index="2" style="color: yellow">4% faster strategy response. Dropped GCC in favor of LLVM</h3>
+				</section>
+				<section>
+					<a href="https://github.com/ClickHouse/ClickHouse">ClickHouse</a> &mdash; open source analytics database
+					<ul>
+						<li>Transition from GCC to LLVM</li>
+						<li>-O3</li>
+						<li>-msse4.2</li>
+						<li>-flto=thin</li>
+						<li>Transition from libstdc++ to libc++</li>
+						<li>libc++ unstable ABI</li>
+						<li>char8_t</li>
+						<li>Function alignment 32</li>
+						<li>Inline threshold 1000 (dropped in the end)</li>
+					</ul>
+					<h3 class="fragment" data-fragment-index="2" style="color: yellow">7-10% better query response</h3>
+					<h3 class="fragment" data-fragment-index="3" style="color: yellow">12% binary size decrease</h3>
+				</section>
+				<section>
+					<h2>Google's perspective</h2>
+					<ul>
+						<li>We run all infrastructure built with Clang/LLVM</li>
+						<li>We build and compile LLVM from (almost) head</li>
+						<li>ThinLTO for release builds, for testing no LTO</li>
+						<li>PGO for highly important binaries</li>
+						<li>-msse4.2, -march=haswell</li>
+						<li>Moved from libstdc++ to libc++</li>
+					</ul>
+					<h3 class="fragment" data-fragment-index="2" style="color: yellow">3-5% fleetwide savings</h3>
+					<h3 class="fragment" data-fragment-index="3" style="color: yellow">2-2.5% binary size win</h3>
+				</section>
+				<section>
+					<ul>
+					  <li>Email: <a href="danilak@google.com">danilak@google.com</a></li>
+					  <li>Github: <a href="https://github.com/danlark1">@Danlark1</a></li>
+					  <li>Telegram: <a href="https://t.me/danlark">@Danlark</a></li>
+				  </ul>
+				  <img src="https://c.tenor.com/oQ6asse12JsAAAAd/bo-burnham-inside.gif"></src>
+				</section>
+			</div>
+		</div>
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script src="plugin/math/math.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.configure({ pdfMaxPagesPerSlide: 1 })
+			Reveal.configure({ pdfSeparateFragments: false });
+
+			Reveal.initialize({
+				hash: true,
+				slideNumber: 'c/t',
+				// Learn about plugins: https://revealjs.com/plugins/
+				math: {
+		      mathjax: 'https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js',
+		      config: 'TeX-AMS_HTML-full',
+		      // pass other options into `MathJax.Hub.Config()`
+		      TeX: { Macros: { RR: "{\\bf R}" } }
+		    },
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath ]
+			});
+		</script>
+	</body>
+</html>
