@@ -17,7 +17,7 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section data-background="title.png">
+				<section data-background="media/title.png">
 				</section>
 				<section data-auto-animate>
 					<h2 style="margin-top: -200px;">Who am I?</h2>
@@ -2421,12 +2421,12 @@ BOOST_ITERATOR_FACADE_RANDOM_ACCESS_RELATION(>=, return 0 <=, distance_from)
 				<section>
 					Third party libraries may require that
 					<div class="r-stack">
-						<img class="fragment fade-in-then-out" src="simdjson.png"></src>
-						<img class="fragment fade-in-then-out" src="hyperscan.png"></src>
-						<img class="fragment fade-in-then-out" src="base64.png"></src>
-						<img class="fragment fade-in-then-out" src="zstd.png"></src>
-						<img class="fragment fade-in-then-out" src="snappy.png"></src>
-						<img class="fragment fade-in-then-out" src="fastops.png"></src>
+						<img class="fragment fade-in-then-out" src="media/simdjson.png"></src>
+						<img class="fragment fade-in-then-out" src="media/hyperscan.png"></src>
+						<img class="fragment fade-in-then-out" src="media/base64.png"></src>
+						<img class="fragment fade-in-then-out" src="media/zstd.png"></src>
+						<img class="fragment fade-in-then-out" src="media/snappy.png"></src>
+						<img class="fragment fade-in-then-out" src="media/fastops.png"></src>
 					</div>
 					<a href="https://github.com/simdjson/simdjson/blob/95b4870e20be5f97d9dcf63b23b1c6f520c366c1/doc/implementation-selection.md">SIMDJSON</a>, <a href="https://github.com/intel/hyperscan/blob/64a995bf445d86b74eb0f375624ffc85682eadfe/doc/dev-reference/getting_started.rst">Hyperscan</a>, <a href="https://github.com/powturbo/Turbo-Base64">Turbo-Base64</a>, <a href="https://github.com/facebook/zstd/blob/d8d6e48a0a85726594322e88b3d258f22fefaae1/lib/README.md">ZSTD</a>, <a href="https://github.com/google/snappy/blob/master/snappy.cc">Snappy</a>, <a href="https://github.com/yandex/fastops">Yandex FastOps</a>, <a href="https://github.com/openssl/openssl/blob/38fc02a7084438e384e152effa84d4bf085783c9/crypto/aes/asm/vpaes-x86_64.pl">OpenSSL</a>
 				</section>
@@ -2462,7 +2462,7 @@ const uint64_t MaxSimplifiedDynamicAllocaToInline = 65536;</code></pre>
 						<li style="color: red">Inlining increases your build size</li>
 						<li style="color: red" class="fragment" data-fragment-index=1>And compile time</li>
 					</ul>
-						<img class="fragment" data-fragment-index=2 src="inlining.png"></src>
+						<img class="fragment" data-fragment-index=2 src="media/inlining.png"></src>
 				</section>
 				<section>
 <iframe width="1000px" height="700px" src="https://gcc.godbolt.org/e#z:OYLghAFBqd5QCxAYwPYBMCmBRdBLAF1QCcAaPECAMzwBtMA7AQwFtMQByARg9KtQYEAysib0QXACx8BBAKoBnTAAUAHpwAMvAFYTStJg1DIApACYAQuYukl9ZATwDKjdAGFUtAK4sGEgMykrgAyeAyYAHI%2BAEaYxBJmpAAOqAqETgwe3r4ByanpAqHhUSyx8VyJdpgOGUIETMQEWT5%2BXIFVNQJ1DQRFkTFxCbb1jc05bcM9fSVlCQCUtqhexMjsHGEEANRUEHMm/lYaAIImx2G0YZibG5vAAPrnl7ubJgDsh0ebX5vEmATLDG2z2sQLmL0soPBFkhIJ2YNhwIhcKhMKRiOhyIR8LRewOpxOrwAIvj8Td7gwBA8GBdwsD3vjvj8/gDURj0ayOZicSiuWzsXyeezeaD9h83sTjqTBJsWEwwnSPoz7o9abjFd9yZSVZhdqKSUSOAtaJwAKy8PwcLSkVCcNzWEEKJYrK7mfw8UgETSGhYAaxAJpNADoAJxmABsYZN/hNYeDGgAHMHXoljRxJOavdbOLwFCANB6vQs4LAkGgWEk6HFyJQyxX6PFkAYjHcCMQvAwfXw6AQ4rmINFM9Ewg0AJ6cd1ltiCADy1LHlt4WFlRnEC9I%2BF%2BNQAbphc2vMKpql4e%2BPeBtMKmrRdosRRx4sJnW3gWKeFlQDMAFAA1PCYADu05JIwp4yIIIhiOwUigfIShqJmuiBE2xj2pY%2Bh4NEuaQAsqBJI4Ah7gAtNO/g5he1R4X4ECuGMrRBAw6DTAM5R5GkFE0XoKSsRkjGlIMXC2GRnQMN0oyeC0egdBRIm9JcMx8ZMonZLRCgjDJxRMRICyOssqx6K2mBrDwRqmhma42hwqjxmGBFhpImyNoYwCbBArbtj6YIQHaljWKQmy4IQJDgm6vkeOWlbEEF/hzLwnoLnMCwIJgTBYPEuykH6kiSIGGivP4/iSLZ/gaMGXAaGY8b6Jw6akC%2BpX5haVrmTmeYFnFxkcGYpmNdmrVaPFpA7sQaTOJIQA%3D"></iframe>
@@ -2564,7 +2564,7 @@ Another problem: <a href="https://www.intel.com/content/dam/support/us/en/docume
 #define _LIBCPP_ABI_ENABLE_SHARED_PTR_TRIVIAL_ABI</code></pre>
 				</section>
 				<section>
-					<iframe width="1600px" height="800px" src="https://gcc.godbolt.org/e#z:OYLghAFBqd5QCxAYwPYBMCmBRdBLAF1QCcAaPECAMzwBtMA7AQwFtMQByARg9KtQYEAysib0QXACx8BBAKoBnTAAUAHpwAMvAFYTStJg1DIApACYAQuYukl9ZATwDKjdAGFUtAK4sGIM1ykrgAyeAyYAHI%2BAEaYxCAAbKQADqgKhE4MHt6%2B/oGp6Y4CoeFRLLHxSXaYDplCBEzEBNk%2BfgG2mPZFDPWNBCWRMXGJtg1NLbntCmP9YYPlwwkAlLaoXsTI7BzmAMxhyN5YANQmO25sLCQAnqfYJhoAgvcPYQRHVBDT6CAgXgx4AEcvJgAPrJAjEU5uV63I7JJanKyPZ6vI7AT4Eb6/f5A0HgyFnGE7bBwpYnADsSIeRxp7wxWMuADdMBB4QidlSTOSACIcFa0TgAVl4fg4WlIqE4bms1iOCjWG0wJzMOx4pAImj5KwA1iAduSAHQATi45MkAA5BWYElazIKjTt9JxJCLNRLOLwFCANOrNSs4LAYIgUKgWMk6HFyJQ0GGI/EDoZgCCIX9tXw6AQ4l6INE3dEwo0rpw1TG2IIAPIMWhFsW8LAsRPiWukfDEGqOZle5uYVQ1LyZ4u8V6dN20PDRYiFjxYN0QvAsQcrKgGYAKABqeEwAHdy8lGIOZIIRGJ2FJD/IlGo3bpHQYjCgZZZ9OOvZAVqhwZkuwBacs7I7flQDCoN%2BPabJ%2BAgKABXxjtEpzcrBpiWNYnqdO2mQuAw7ieK0EhniEcxlBUeEpGkGQCBMfhcGeBTkQwAxEcM1EdF0dQzJReHSNUtQCL0TQMUM8TMdMfQcdRXEzAJCxCVwKzyusmx6BCmBbDw/JCq6zaShwqjmgk34JJIRwJkYRwQCmDDamSEDSshT5HLghAkMqqqkEcHixvQxAuTsSy8BqtZLCsCCYEwWDxBAOogFaBr6g6DpSIKCQaGeAocC6pALoKPqiuK2met6vqBaQAbBjG4ZeVGEDlXGKB3kmFlpjQtCZsQ2a5s2%2BbMMQNYlqGZYEJW1ZuvWjZbOKrboZ2bo9n2A7cEOggjs2sGTj107jf5xDzoufAruum47nuopqvwR6iOIZ5nReKjqM2uiBPVD52TYsGvpFEoQQwP5/gBQEgWBmBfVB34weO8GIY%2BFgAdyILBAAkhYbjKMoIIPBY8MgtgETo8E2AgnIETwwAinI%2BPKAAKgASiC1Pw2u8MPMEaMY6hrHOBArgceS5JBFhUnEY6tHdNzvPC5kAvDI63HdHxzQ4bkPMsehvGSYRgl6qMokK34Ssifx6vSXqckKopgTKapfJOhwwqkLlvDabp%2BmGcZ9VmY11m2VY9mOUQ3m7IE7mhhVcQubJ/l%2BsFoXhZQ6npbwWU5W6%2BW2IVAVaEFpC6gkZgGho5p2lI5I7JIPOSBoNrWzsml5R6RUZ3HZg1w7dfp1qpDMm1GGSEAA%3D%3D"></iframe>
+					<iframe width="1600px" height="700px" src="https://gcc.godbolt.org/e#z:OYLghAFBqd5QCxAYwPYBMCmBRdBLAF1QCcAaPECAMzwBtMA7AQwFtMQByARg9KtQYEAysib0QXACx8BBAKoBnTAAUAHpwAMvAFYTStJg1DIApACYAQuYukl9ZATwDKjdAGFUtAK4sGIM1ykrgAyeAyYAHI%2BAEaYxCAAbKQADqgKhE4MHt6%2B/oGp6Y4CoeFRLLHxSXaYDplCBEzEBNk%2BfgG2mPZFDPWNBCWRMXGJtg1NLbntCmP9YYPlwwkAlLaoXsTI7BzmAMxhyN5YANQmO25sLCQAnqfYJhoAgvcPYQRHVBDT6CAgXgx4AEcvJgAPrJAjEU5uV63I7JJanKyPZ6vI7AT4Eb6/f5A0HgyFnGE7bBwpYnADsSIeRxp7wxWMuADdMBB4QidlSTOSACIcFa0TgAVl4fg4WlIqE4bms1iOCjWG0wJzMOx4pAImj5KwA1iAduSAHQATi45MkAA5BWYElazIKjTt9JxJCLNRLOLwFCANOrNSs4LAYIgUKgWMk6HFyJQ0GGI/EDoZgCCIX9tXw6AQ4l6INE3dEwo0rpw1TG2IIAPIMWhFsW8LAsRPiWukfDEGqOZle5uYVQ1LyZ4u8V6dN20PDRYiFjxYN0QvAsQcrKgGYAKABqeEwAHdy8lGIOZIIRGJ2FJD/IlGo3bpHQYjCgZZZ9OOvZAVqhwZkuwBacs7I7flQDCoN%2BPabJ%2BAgKABXxjtEpzcrBpiWNYnqdO2mQuAw7ieK0EhniEcxlBUeEpGkGQCBMfhcGeBTkQwAxEcM1EdF0dQzJReHSNUtQCL0TQMUM8TMdMfQcdRXEzAJCxCVwKzyusmx6BCmBbDw/JCq6zaShwqjmgk34JJIRwJkYRwQCmDDamSEDSshT5HLghAkMqqqkEcHixvQxAuTsSy8BqtZLCsCCYEwWDxBAOogFaBr6g6DpSIKCQaGeAocC6pALoKPqiuK2met6vqBaQAbBjG4ZeVGEDlXGKB3kmFlpjQtCZsQ2a5s2%2BbMMQNYlqGZYEJW1ZuvWjZbOKrboZ2bo9n2A7cEOggjs2sGTj107jf5xDzoufAruum47nuopqvwR6iOIZ5nReKjqM2uiBPVD52TYsGvpFEoQQwP5/gBQEgWBmBfVB34weO8GIY%2BFgAdyILBAAkhYbjKMoIIPBY8MgtgETo8E2AgnIETwwAinI%2BPKAAKgASiC1Pw2u8MPMEaMY6hrHOBArgceS5JBFhUnEY6tHdNzvPC5kAvDI63HdHxzQ4bkPMsehvGSYRgl6qMokK34Ssifx6vSXqckKopgTKapfJOhwwqkLlvDabp%2BmGcZ9VmY11m2VY9mOUQ3m7IE7mhhVcQubJ/l%2BsFoXhZQ6npbwWU5W6%2BW2IVAVaEFpC6gkZgGho5p2lI5I7JIPOSBoNrWzsml5R6RUZ3HZg1w7dfp1qpDMm1GGSEAA%3D%3D"></iframe>
 				</section>
 				<section>
 					2-2.5% build size win at Google (it requires building everything from source)
@@ -2744,7 +2744,7 @@ __copy(_Tp* __first, _Tp* __last, _Up* __result)
 					  <li>Github: <a href="https://github.com/danlark1">@Danlark1</a></li>
 					  <li>Telegram: <a href="https://t.me/danlark">@Danlark</a></li>
 				  </ul>
-				  <img src="https://c.tenor.com/oQ6asse12JsAAAAd/bo-burnham-inside.gif"></src>
+				  <img src="https://c.tenor.com/oQ6asse12JsAAAAd/bo-burnham-inside.gif" width="400px"></src>
 				  <p>Thanks to carzil@ for proofreading!</p>
 				</section>
 			</div>
